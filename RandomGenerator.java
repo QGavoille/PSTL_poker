@@ -37,5 +37,16 @@ public class RandomGenerator {
         }
         return bits;
     }
+    public int toInt(int[] bits){
+        int i = 0;
+        for(int d = 0; d<bits.length; d++){
+            i+= Math.pow(2,d)*bits[d];
+        }
+        return i;
+    }
+
+    public int nextInt(int nbBits){
+        return toInt(getNextNBits(nbBits));
+    }
 
 }
