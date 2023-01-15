@@ -29,7 +29,7 @@ public class CardGame {
 
     }
 
-    public void shuffle(){
+    public void badShuffle(){
         Card tmp ;
         RandomGenerator r = new RandomGenerator();
         for(int i = 0; i< 52;i++){
@@ -42,6 +42,20 @@ public class CardGame {
 
 
     }
+
+   public void goodShuffle(){
+        Card tmp;
+        RandomGenerator r = new RandomGenerator();
+        for(int i = 0; i<52;i++){
+            int nextPos = r.nextInt(6);
+            while (nextPos>=52){
+                nextPos = r.nextInt(6);
+            }
+            tmp = deck[nextPos];
+            deck[nextPos] = deck[i];
+            deck[i] = tmp;
+        }
+   }
 
 
     public boolean checkInvariant(){
