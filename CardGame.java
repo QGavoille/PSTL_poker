@@ -3,6 +3,7 @@ import java.util.List;
 
 public class CardGame {
     private Card[] deck;
+    int current = 51;
 
     public CardGame(){
         deck = new Card[52];
@@ -22,9 +23,14 @@ public class CardGame {
     }
     public String toString(){
         String toret = "";
+
         for(Card c: deck){
-            toret+= c.getValue()+" de "+ c.getCouleur().toString()+"\n";
+            try {toret+= c.getValue()+" de "+ c.getCouleur().toString()+"\n";}
+            catch(Exception e){
+                toret+= "*\n";
+            }
         }
+
         return toret;
 
     }
@@ -41,6 +47,21 @@ public class CardGame {
         }
 
 
+    }
+
+    public Card pop(){
+        Card ret = deck[current];
+        deck[current] = null;
+        current --;
+
+        return ret;
+    }
+    public Card[] multiPop(int hm){
+        Card[] ret = new Card[hm];
+        for(int i = 0; i<hm; i++){
+            ret[i] = pop();
+        }
+        return ret;
     }
 
    public void goodShuffle(){

@@ -9,5 +9,8 @@ public class Test {
       c.goodShuffle();
       print(c);
       print(c.checkInvariant());
+      Partie p = new Partie();
+      p.deal();
+      System.out.println(p);
     }
 }
