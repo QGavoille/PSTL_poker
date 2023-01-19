@@ -1,3 +1,7 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class Partie {
 
     private Player[] joueurs;
@@ -13,19 +17,25 @@ public class Partie {
 
         joueurs[3] = new Player(3,"Godefroy",new Card[2]);
 
-        deck = new CardGame();
+        deck = new CardGame(new RandomGenerator());
         deck.badShuffle();
         table = new Card[5];
     }
     public void deal(){
-        for(Player p: joueurs){
-            p.setJeux(deck.multiPop(2));
-            if(p.getId()!=3){
-                p.cache();
-            }
-        }
         table = deck.multiPop(5);
+        joueurs[3].setJeux(deck.multiPop(2));
+        joueurs[2].setJeux(deck.multiPop(2));
+        joueurs[1].setJeux(deck.multiPop(2));
+        joueurs[0].setJeux(deck.multiPop(2));
+        examine(2);
+        examine(1);
+        joueurs[0].cache();
 
+    }
+    public void nvGame(){
+        deck = new CardGame(deck.getRandom());
+        deck.badShuffle();
+        deal();
     }
 
     public String toString(){
@@ -52,4 +62,28 @@ public class Partie {
     public void examine(int id){
         joueurs[id].montre();
     }
+
+    public void writeVisible(boolean append) throws IOException {
+        FileWriter fr = new FileWriter("cards.projet",append);
+        BufferedWriter writer = new BufferedWriter(fr);
+        writer.write("mes cartes:"+joueurs[3].getJeux()[0].toString()+";"+joueurs[3].getJeux()[1].toString());
+        writer.newLine();
+        writer.write("table:");
+        for (Card c:table
+             ) {
+            writer.write(c.toString()+";");
+        }
+        writer.newLine();
+        writer.write("j2:"+joueurs[2].getJeux()[0].toString()+";"+joueurs[2].getJeux()[1].toString());
+        writer.newLine();
+        writer.write("j3:"+joueurs[1].getJeux()[0].toString()+";"+joueurs[1].getJeux()[1].toString());
+        writer.newLine();
+        writer.write("<>");
+        writer.newLine();
+
+
+        writer.close();
+
+    }
+
 }

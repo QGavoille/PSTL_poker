@@ -40,7 +40,7 @@ public class RandomGenerator {
     public int toInt(int[] bits){
         int i = 0;
         for(int d = 0; d<bits.length; d++){
-            i+= Math.pow(2,d)*bits[d];
+            i+= Math.pow(2,d)*bits[d];//bit de poids faible
         }
         return i;
     }
