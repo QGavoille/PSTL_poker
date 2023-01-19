@@ -10,13 +10,15 @@ public class RandomGenerator {
         currIndex = 0;
         randomBits = new int[32];
         int first = generator.nextInt();
+        System.out.print("l'entier: ");
+        System.out.println(first);
         toBitArray(first);
     }
 
     private void toBitArray(int number) {
         for (int i = 0; i < 32; i++) {
             randomBits[i] = number & 1;
-            number = number >> 1;
+            number = number >> 1; //bit de poid faible a gauche
         }
     }
 
@@ -24,6 +26,7 @@ public class RandomGenerator {
         int next = randomBits[currIndex];
         currIndex++;
         if(currIndex == 31) {
+            System.out.println("nouvel Entier generé");
             currIndex = 0;
             toBitArray(generator.nextInt());
         }
@@ -33,14 +36,15 @@ public class RandomGenerator {
     public int[] getNextNBits(int n) {
         int[] bits = new int[n];
         for (int i = 0; i < n; i++) {
-            bits[i] = getNextBit();
+            System.out.println("hey");
+            bits[i] = getNextBit();//bits de poids faible a gauche
         }
         return bits;
     }
     public int toInt(int[] bits){
         int i = 0;
         for(int d = 0; d<bits.length; d++){
-            i+= Math.pow(2,d)*bits[d];//bit de poids faible
+            i+= Math.pow(2,d)*bits[d];//bit de poids faible a gauche
         }
         return i;
     }
