@@ -54,6 +54,7 @@ public class CardGame {
             tmp = deck[nextPos];
             deck[nextPos] = deck[i];
             deck[i] = tmp;
+            translation++;
 
         }
     }
