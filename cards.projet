@@ -1,35 +1,5 @@
-mes cartes:2 de PIQUE;10 de TREFLE
-table:10 de PIQUE;11 de COEUR;2 de TREFLE;12 de CARREAU;7 de COEUR;
-j2:4 de CARREAU;1 de COEUR
-j3:13 de PIQUE;9 de PIQUE
-<>
-mes cartes:13 de TREFLE;10 de PIQUE
-table:8 de COEUR;4 de PIQUE;5 de CARREAU;13 de CARREAU;7 de COEUR;
-j2:6 de CARREAU;8 de TREFLE
-j3:12 de COEUR;7 de TREFLE
-<>
-mes cartes:7 de CARREAU;6 de CARREAU
-table:10 de CARREAU;13 de PIQUE;8 de COEUR;2 de COEUR;10 de TREFLE;
-j2:3 de TREFLE;4 de TREFLE
-j3:12 de PIQUE;5 de COEUR
-<>
-mes cartes:12 de COEUR;4 de TREFLE
-table:4 de CARREAU;9 de PIQUE;11 de CARREAU;7 de CARREAU;9 de CARREAU;
-j2:12 de CARREAU;6 de TREFLE
-j3:6 de CARREAU;10 de PIQUE
-<>
-mes cartes:2 de TREFLE;11 de CARREAU
-table:2 de CARREAU;4 de COEUR;4 de PIQUE;12 de CARREAU;11 de PIQUE;
-j2:4 de CARREAU;11 de TREFLE
-j3:12 de COEUR;13 de COEUR
-<>
-mes cartes:12 de COEUR;12 de CARREAU
-table:6 de CARREAU;13 de CARREAU;7 de PIQUE;9 de TREFLE;8 de PIQUE;
-j2:4 de COEUR;13 de COEUR
-j3:2 de PIQUE;13 de TREFLE
-<>
-mes cartes:2 de PIQUE;4 de COEUR
-table:6 de TREFLE;7 de COEUR;4 de CARREAU;4 de TREFLE;8 de PIQUE;
-j2:9 de TREFLE;8 de COEUR
-j3:3 de TREFLE;10 de PIQUE
+mes cartes:2 de TREFLE;7 de PIQUE
+table:4 de COEUR;7 de TREFLE;3 de TREFLE;2 de CARREAU;12 de PIQUE;
+j2:6 de PIQUE;1 de COEUR
+j3:2 de COEUR;9 de COEUR
 <>

@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class CardGame {
     private Card[] deck;
-    private int current = 51;
+    private int current = 0;
     private RandomGenerator random;
 
     public CardGame(RandomGenerator rand){
@@ -65,7 +65,7 @@ public class CardGame {
     public Card pop(){
         Card ret = deck[current];
         deck[current] = null;
-        current --;
+        current ++;
 
         return ret;
     }
