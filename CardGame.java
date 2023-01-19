@@ -50,7 +50,7 @@ public class CardGame {
         for(int i = 0; i<52;i++){
             System.out.print(((int)log2(51-i))+1);
             System.out.println("   "+(51-i));
-            int nextPos = random.nextInt(translation+((int)log2(51-i))+1)%(52-i);
+            int nextPos = translation+random.nextInt(((int)log2(51-i))+1)%(52-i);
             tmp = deck[nextPos];
             deck[nextPos] = deck[i];
             deck[i] = tmp;
