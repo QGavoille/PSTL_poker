@@ -26,12 +26,14 @@ public class CardGame {
     }
     public String toString(){
         String toret = "";
-
+        int i = 0;
         for(Card c: deck){
+            toret += i+" : ";
             try {toret+= c.getValue()+" de "+ c.getCouleur().toString()+"\n";}
             catch(Exception e){
                 toret+= "*\n";
             }
+            i++;
         }
 
         return toret;
