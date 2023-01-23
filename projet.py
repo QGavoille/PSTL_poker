@@ -68,25 +68,26 @@ def card2int(s):
 
 
 def int2bin(i):
-    return bin(i).split("0b")[1]
+    return "".join(reversed(bin(i).split("0b")[1]))
 def complete(i):
     if(len(i)>6):
         print(len(i))
         return "0"
     if len(i)!= 6:
         while len(i)!= 6:
-            i = "0"+i
+            i = i+"0"
 
     return i
 
 def b2tob10(i):
     cpt = 0
     for k in range(len(i)):
-        cpt+= (2**k)*int(i[len(i)-1-k])
+        cpt+= (2**k)*int(i[k])
     return cpt
 
 def recupX(s):
     l = []
+
     for k in range(5):
           l += [getTable(s,0)[k]]
     l += [getMyCards(s,0)[0]]
@@ -96,23 +97,67 @@ def recupX(s):
     l += [getNextNextPlayerCard(s, 0)[0]]
     l += [getNextNextPlayerCard(s, 0)[1]]
     cpt = ""
-    for i in range(5):
+    for k in range(5):
+        cpt = cpt+complete(int2bin(card2int(l[k])-k))#30 bits
 
-        cpt = complete(int2bin(card2int(l[i])))+cpt
-    cpt = "".join(reversed(complete(int2bin(card2int(l[6])))[-1]+cpt))
+    cpt = cpt + complete(int2bin(card2int(l[5])-5))[-2]#31 bits
+    cpt = cpt +complete(int2bin(card2int(l[5])-5))[-1]#31 bits
+    return cpt
+
+def isValid(bits,decalage):
+    if(b2tob10(bits)<12+decalage):
+        return False
+    return True
+
+def convert(bits,decalage):
+    b10 = b2tob10(bits)
+    b10 = b10 +(52-decalage)
+    return int2bin(b10)
+
+def newRecupX(s):
+    l = []
+    toret = [""]
+    for k in range(5):
+          l += [getTable(s,0)[k]]
+    l += [getMyCards(s,0)[0]]
+    l += [getMyCards(s,0)[1]]
+    l += [getNextPlayerCard(s, 0)[0]]
+    l += [getNextPlayerCard(s, 0)[1]]
+    l += [getNextNextPlayerCard(s, 0)[0]]
+    l += [getNextNextPlayerCard(s, 0)[1]]
+
+    for k in range(5):
+        if isValid(complete(int2bin(card2int(l[k]) - k)), k):
+            tmp = []
+            for d in toret:
+                tmp += [d+complete(int2bin(card2int(l[k])-k))]
+            toret = tmp
+        else:
+            toadd = []
+            print("here")
+            for d in toret:
+                toadd += [d+complete(int2bin(card2int(l[k])-k))]
+                toadd+=[d+convert(complete(int2bin(card2int(l[k])-k)),k)]
+            toret = toadd
+    toadd = []
+    if isValid(complete(int2bin(card2int(l[5]) - 5)),5):
+
+        for k in toret:
+            toadd += [k+complete(int2bin(card2int(l[5])-5))[0]+complete(int2bin(card2int(l[5])-5))[1]]
+    else:
+        toadd = []
+        for d in toret:
+            toadd += [d + complete(int2bin(card2int(l[5]) - 5))[0]+complete(int2bin(card2int(l[5]) - 5))[1]]
+            toadd += [d + convert(complete(int2bin(card2int(l[5]) - 5)), 5)[0]+convert(complete(int2bin(card2int(l[5]) - 5)), 5)[1]]
+
+    toret = toadd
 
 
-    return b2tob10(cpt) #bit de poids faible a droite
+    return toret
 
 
 
 
-print(getMyCards(recupFile(),0))
-print(getNextPlayerCard(recupFile(),0))
-print(getNextNextPlayerCard(recupFile(),0))
-print(getTable(recupFile(),0))
-print(recupX(recupFile()))
-print(complete(int2bin(6)))
 
 
 
