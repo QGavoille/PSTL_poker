@@ -155,7 +155,8 @@ def newRecupX(s):
 
     return toret
 
-
+#TODO regler le problème du melange (permutation 1-3 puis 2-3)
+#TODO regler le problème des 2 derniers bits
 
 
 
