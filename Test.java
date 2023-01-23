@@ -28,6 +28,7 @@ public class Test {
        System.out.println(p);
 
        p.writeVisible(false);
+       System.out.println(c.getRandom().toInt(new int[]{1, 0, 1, 1, 0, 0}));
        while(true){
            Scanner sc = new Scanner(System.in);
            System.out.println("continue/examine/exit");
