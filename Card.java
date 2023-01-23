@@ -3,9 +3,11 @@ public class Card {
     private Couleur couleur;
     private boolean visible = true;
 
+
     public Card(int v , Couleur c){
         value = v;
         couleur= c;
+
 
     }
 
