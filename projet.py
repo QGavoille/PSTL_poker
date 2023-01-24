@@ -196,7 +196,7 @@ def newRecupX(s):
 def recupXagain(s):
     deck = [k for k in range(52)]
     l = []
-    toret = ""
+    toret = [""]
     for k in range(5):
           l += [getTable(s,0)[k]]
     l += [getMyCards(s,0)[0]]
@@ -206,8 +206,24 @@ def recupXagain(s):
     l += [getNextNextPlayerCard(s, 0)[0]]
     l += [getNextNextPlayerCard(s, 0)[1]]
     for k in range(5):
-        toret = toret+complete(int2bin(deck.index(card2int(l[k]))-k))
-        makePerm(k,deck.index(card2int(l[k])),deck)
+        if isValid(int2bin(deck.index(card2int(l[k])) - k),k):
+            tmp = []
+            for qqc in toret:
+                tmp += [qqc+complete(int2bin(deck.index(card2int(l[k]))-k))]
+
+            toret = tmp
+        else:
+            toadd = []
+            for qqc in toret:
+                toadd+= [qqc+complete(int2bin(deck.index(card2int(l[k]))-k))]
+                toadd+= [qqc+convert(int2bin(deck.index(card2int(l[k]))-k),k)]
+            toret = toadd
+        makePerm(k, deck.index(card2int(l[k])), deck)
+    tmp = []
+    for k in toret:
+        tmp+=[k+int2bin(card2int(l[5])-5)[0]+int2bin(card2int(l[5])-5)[1]]
+    toret = tmp
+
     return toret
 
 
