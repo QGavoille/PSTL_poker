@@ -7,7 +7,7 @@ public class Partie {
     private Player[] joueurs;
     private CardGame deck;
     public Card[] table;
-    public Partie(){
+    public Partie() throws IOException {
         joueurs = new Player[4];
         joueurs[0] = new Player(0,"Rigobert",new Card[2]);
 
@@ -32,7 +32,7 @@ public class Partie {
         joueurs[0].cache();
 
     }
-    public void nvGame(){
+    public void nvGame() throws IOException {
         deck = new CardGame(deck.getRandom());
         deck.badShuffle();
         deal();
