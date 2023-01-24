@@ -143,6 +143,14 @@ def recupXagain(s):
     return toret
 
 
+def x32bitsTo48bits(x0,x1):
+    x = int2bin(x0)
+    for k in range(2**16):
+        f = b2tob10(x+int2bin(k))
+        if(25214903917*f+11)%(2**48) == x1:
+            return f
+    return f
+
 #TODO regler le problème des 2 derniers bits
 
 
