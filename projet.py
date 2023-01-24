@@ -114,6 +114,44 @@ def convert(bits,decalage):
     b10 = b10 +(52-decalage)
     return int2bin(b10)
 
+def unshuffleSbs(c1,pos,d):
+
+    tmp = d[card2int(c1)]
+    d[card2int(c1)] = d[pos]
+    d[pos] = tmp
+    return d
+
+#une permutation pose un problème quand si on l'inverse alors les éléments ne sont pas en ordre
+
+def scan(s):
+    l = [k for k in range(52)]#jeu trié
+
+    for k in range(5):
+        tmp = l[k] #0
+        l[l.index(card2int(getTable(s, 0)[k]))] = tmp  # l[7] = 0
+        l[k] = card2int(getTable(s,0)[k]) # l[0] = 7
+
+    return l
+
+def makePerm(dep,ar,l = [k for k in range(51)]):
+    tmp = l[dep]
+    l[dep ] = l[ar]
+    l[ar] = tmp
+    return l
+
+
+def int2card(i):
+    if i< 13:
+        return ""+str(i+1)+" de PIQUE"
+    elif i<26:
+        return ""+str(i-12)+" de TREFLE"
+    elif i<39:
+        return ""+str(i-25)+" de COEUR"
+    else:
+        return ""+str(i-38)+" de CARREAU"
+
+
+
 def newRecupX(s):
     l = []
     toret = [""]
@@ -155,7 +193,24 @@ def newRecupX(s):
 
     return toret
 
-#TODO regler le problème du melange (permutation 1-3 puis 2-3)
+def recupXagain(s):
+    deck = [k for k in range(52)]
+    l = []
+    toret = ""
+    for k in range(5):
+          l += [getTable(s,0)[k]]
+    l += [getMyCards(s,0)[0]]
+    l += [getMyCards(s,0)[1]]
+    l += [getNextPlayerCard(s, 0)[0]]
+    l += [getNextPlayerCard(s, 0)[1]]
+    l += [getNextNextPlayerCard(s, 0)[0]]
+    l += [getNextNextPlayerCard(s, 0)[1]]
+    for k in range(5):
+        toret = toret+complete(int2bin(deck.index(card2int(l[k]))-k))
+        makePerm(k,deck.index(card2int(l[k])),deck)
+    return toret
+
+
 #TODO regler le problème des 2 derniers bits
 
 
