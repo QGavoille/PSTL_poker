@@ -38,3 +38,45 @@ print(projet.recupXagain(projet.recupFile()))
 
 
 # 10111001100110110001011001010011
+
+'''
+def newRecupX(s):
+    l = []
+    toret = [""]
+    for k in range(5):
+          l += [getTable(s,0)[k]]
+    l += [getMyCards(s,0)[0]]
+    l += [getMyCards(s,0)[1]]
+    l += [getNextPlayerCard(s, 0)[0]]
+    l += [getNextPlayerCard(s, 0)[1]]
+    l += [getNextNextPlayerCard(s, 0)[0]]
+    l += [getNextNextPlayerCard(s, 0)[1]]
+
+    for k in range(5):
+        if isValid(complete(int2bin(card2int(l[k]) - k)), k):
+            tmp = []
+            for d in toret:
+                tmp += [d+complete(int2bin(card2int(l[k])-k))]
+            toret = tmp
+        else:
+            toadd = []
+            print("here")
+            for d in toret:
+                toadd += [d+complete(int2bin(card2int(l[k])-k))]
+                toadd+=[d+convert(complete(int2bin(card2int(l[k])-k)),k)]
+            toret = toadd
+    toadd = []
+    if isValid(complete(int2bin(card2int(l[5]) - 5)),5):
+
+        for k in toret:
+            toadd += [k+complete(int2bin(card2int(l[5])-5))[0]+complete(int2bin(card2int(l[5])-5))[1]]
+    else:
+        toadd = []
+        for d in toret:
+            toadd += [d + complete(int2bin(card2int(l[5]) - 5))[0]+complete(int2bin(card2int(l[5]) - 5))[1]]
+            toadd += [d + convert(complete(int2bin(card2int(l[5]) - 5)), 5)[0]+convert(complete(int2bin(card2int(l[5]) - 5)), 5)[1]]
+
+    toret = toadd
+
+
+    return toret'''

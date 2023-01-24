@@ -85,24 +85,6 @@ def b2tob10(i):
         cpt+= (2**k)*int(i[k])
     return cpt
 
-def recupX(s):
-    l = []
-
-    for k in range(5):
-          l += [getTable(s,0)[k]]
-    l += [getMyCards(s,0)[0]]
-    l += [getMyCards(s,0)[1]]
-    l += [getNextPlayerCard(s, 0)[0]]
-    l += [getNextPlayerCard(s, 0)[1]]
-    l += [getNextNextPlayerCard(s, 0)[0]]
-    l += [getNextNextPlayerCard(s, 0)[1]]
-    cpt = ""
-    for k in range(5):
-        cpt = cpt+complete(int2bin(card2int(l[k])-k))#30 bits
-
-    cpt = cpt + complete(int2bin(card2int(l[5])-5))[-2]#31 bits
-    cpt = cpt +complete(int2bin(card2int(l[5])-5))[-1]#31 bits
-    return cpt
 
 def isValid(bits,decalage):
     if(b2tob10(bits)<12+decalage):
@@ -114,24 +96,10 @@ def convert(bits,decalage):
     b10 = b10 +(52-decalage)
     return int2bin(b10)
 
-def unshuffleSbs(c1,pos,d):
 
-    tmp = d[card2int(c1)]
-    d[card2int(c1)] = d[pos]
-    d[pos] = tmp
-    return d
 
 #une permutation pose un problème quand si on l'inverse alors les éléments ne sont pas en ordre
 
-def scan(s):
-    l = [k for k in range(52)]#jeu trié
-
-    for k in range(5):
-        tmp = l[k] #0
-        l[l.index(card2int(getTable(s, 0)[k]))] = tmp  # l[7] = 0
-        l[k] = card2int(getTable(s,0)[k]) # l[0] = 7
-
-    return l
 
 def makePerm(dep,ar,l = [k for k in range(51)]):
     tmp = l[dep]
@@ -140,58 +108,6 @@ def makePerm(dep,ar,l = [k for k in range(51)]):
     return l
 
 
-def int2card(i):
-    if i< 13:
-        return ""+str(i+1)+" de PIQUE"
-    elif i<26:
-        return ""+str(i-12)+" de TREFLE"
-    elif i<39:
-        return ""+str(i-25)+" de COEUR"
-    else:
-        return ""+str(i-38)+" de CARREAU"
-
-
-
-def newRecupX(s):
-    l = []
-    toret = [""]
-    for k in range(5):
-          l += [getTable(s,0)[k]]
-    l += [getMyCards(s,0)[0]]
-    l += [getMyCards(s,0)[1]]
-    l += [getNextPlayerCard(s, 0)[0]]
-    l += [getNextPlayerCard(s, 0)[1]]
-    l += [getNextNextPlayerCard(s, 0)[0]]
-    l += [getNextNextPlayerCard(s, 0)[1]]
-
-    for k in range(5):
-        if isValid(complete(int2bin(card2int(l[k]) - k)), k):
-            tmp = []
-            for d in toret:
-                tmp += [d+complete(int2bin(card2int(l[k])-k))]
-            toret = tmp
-        else:
-            toadd = []
-            print("here")
-            for d in toret:
-                toadd += [d+complete(int2bin(card2int(l[k])-k))]
-                toadd+=[d+convert(complete(int2bin(card2int(l[k])-k)),k)]
-            toret = toadd
-    toadd = []
-    if isValid(complete(int2bin(card2int(l[5]) - 5)),5):
-
-        for k in toret:
-            toadd += [k+complete(int2bin(card2int(l[5])-5))[0]+complete(int2bin(card2int(l[5])-5))[1]]
-    else:
-        toadd = []
-        for d in toret:
-            toadd += [d + complete(int2bin(card2int(l[5]) - 5))[0]+complete(int2bin(card2int(l[5]) - 5))[1]]
-            toadd += [d + convert(complete(int2bin(card2int(l[5]) - 5)), 5)[0]+convert(complete(int2bin(card2int(l[5]) - 5)), 5)[1]]
-
-    toret = toadd
-
-
-    return toret
 
 def recupXagain(s):
     deck = [k for k in range(52)]
