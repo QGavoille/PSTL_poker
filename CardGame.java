@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -45,20 +48,25 @@ public class CardGame {
         return Math.max(Math.log(nb)/Math.log(2),0);
     }
 
-    public void badShuffle(){//TODO faire une stat dessus
+    public void badShuffle() throws IOException {//TODO faire une stat dessus
         Card tmp;
-
+        FileWriter fr = new FileWriter("trackShuffle.projet");
+        BufferedWriter writer = new BufferedWriter(fr);
+        writer.write("le melange");
         int translation = 0;
         for(int i = 0; i<52;i++){
             System.out.print(((int)log2(51-i))+1);
             System.out.println("   "+(51-i));
             int nextPos = translation+random.nextInt(((int)log2(51-i))+1)%(52-i);
+            writer.write(deck[i].toString()+" <-> "+ deck[nextPos].toString());
+            writer.newLine();
             tmp = deck[nextPos];
             deck[nextPos] = deck[i];
             deck[i] = tmp;
             translation++;
 
         }
+        writer.close();
     }
 
 
@@ -79,8 +87,9 @@ public class CardGame {
         return ret;
     }
 
-   public void goodShuffle(){
+   public void goodShuffle() throws IOException {
         Card tmp;
+
         RandomGenerator r = new RandomGenerator();
         for(int i = 0; i<52;i++){
             int nextPos = r.nextInt(6);
