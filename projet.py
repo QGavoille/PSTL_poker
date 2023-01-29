@@ -46,6 +46,12 @@ def getNextNextPlayerCard(s,i):
     return cards.split(";")[0], cards.split(";")[1]
 
 def getTable(s,i):
+    '''
+
+    :param s: string: contenu du fichier
+    :param i: manche que l'on souhaite examiner: pour examiner la premiere i = 0
+    :return: liste des cartes de la table par ordre chronologique
+    '''
     manche = s.split("<>")[i]
     manche = manche.split("\n")[1]
     cards = manche.split(":")[1]
@@ -55,6 +61,11 @@ def getTable(s,i):
 
 
 def card2int(s):
+    '''
+
+    :param s: chaine de caractère représentant la carte de la forme valeur "de" "TYPE" en majuscule
+    :return: entier correspondant a la carte
+    '''
     ret = s.replace(" ","")
     ret = ret.split("de")
     if ret[1] == "PIQUE":
@@ -68,8 +79,18 @@ def card2int(s):
 
 
 def int2bin(i):
+    '''
+
+    :param i: entier base 10
+    :return: i en base 2
+    '''
     return "".join(reversed(bin(i).split("0b")[1]))
 def complete(i):
+    '''
+
+    :param i: entiers
+    :return:  i completer de 0 a droite
+    '''
     if(len(i)>6):
         print(len(i))
         return "0"
@@ -80,6 +101,11 @@ def complete(i):
     return i
 
 def b2tob10(i):
+    '''
+
+    :param i: entiers en base 2
+    :return:  entier en base 10
+    '''
     cpt = 0
     for k in range(len(i)):
         cpt+= (2**k)*int(i[k])
@@ -87,11 +113,23 @@ def b2tob10(i):
 
 
 def isValid(bits,decalage):
+    '''
+
+    :param bits: groupe de 6 bits
+    :param decalage: manche a laquelle on se trouve
+    :return: true si le groupe de 6 bits est ambigu (depasse 52-decalage)
+    '''
     if(b2tob10(bits)<12+decalage):
         return False
     return True
 
 def convert(bits,decalage):
+    '''
+
+    :param bits: groupe de 6 bits
+    :param decalage: décalage
+    :return: le groupe de 6 bits auquel on a appliquer le décalage
+    '''
     b10 = b2tob10(bits)
     b10 = b10 +(52-decalage)
     return int2bin(b10)
@@ -102,6 +140,12 @@ def convert(bits,decalage):
 
 
 def makePerm(dep,ar,l = [k for k in range(51)]):
+    '''
+    :param dep: indice de départ
+    :param ar: indice d'arrivé
+    :param l: liste danslaquelle on doit permuter l[dep] et l[ar]
+    :return: l permutée
+    '''
     tmp = l[dep]
     l[dep ] = l[ar]
     l[ar] = tmp
@@ -110,6 +154,11 @@ def makePerm(dep,ar,l = [k for k in range(51)]):
 
 
 def recupXagain(s):
+    '''
+
+    :param s: contenu du fichier
+    :return: x0
+    '''
     deck = [k for k in range(52)]
     l = []
     toret = [""]
@@ -142,6 +191,20 @@ def recupXagain(s):
 
     return toret
 
+
+def x32bitsTo48bits(x0,x1):
+    '''
+
+    :param x0: graine en 32 bits
+    :param x1: f(x0) en 32 bits
+    :return: x0 sur 48 bits
+    '''
+    x = int2bin(x0)
+    for k in range(2**16):
+        f = b2tob10(x+int2bin(k))
+        if(25214903917*f+11)%(2**48) == x1:
+            return f
+    return f
 
 #TODO regler le problème des 2 derniers bits
 
