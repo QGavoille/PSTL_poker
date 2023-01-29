@@ -30,7 +30,7 @@ public class RandomGenerator {
     public int getNextBit() {
         int next = randomBits[currIndex];
         currIndex++;
-        if(currIndex == 31) {
+        if(currIndex == 32) {
             System.out.println("nouvel Entier generé");
             currIndex = 0;
             toBitArray(generator.nextInt());

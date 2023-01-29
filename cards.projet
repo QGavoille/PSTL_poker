@@ -1,5 +1,5 @@
-mes cartes:9 de PIQUE;12 de PIQUE
-table:7 de PIQUE;8 de COEUR;7 de CARREAU;10 de CARREAU;1 de TREFLE;
-j2:1 de COEUR;6 de CARREAU
-j3:2 de TREFLE;13 de TREFLE
+mes cartes:3 de TREFLE;13 de COEUR
+table:4 de TREFLE;8 de COEUR;5 de PIQUE;1 de PIQUE;7 de PIQUE;
+j2:11 de PIQUE;5 de TREFLE
+j3:7 de TREFLE;6 de PIQUE
 <>
