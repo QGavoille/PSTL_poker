@@ -170,7 +170,7 @@ def recupXagain(s):
     l += [getNextPlayerCard(s, 0)[1]]
     l += [getNextNextPlayerCard(s, 0)[0]]
     l += [getNextNextPlayerCard(s, 0)[1]]
-    for k in range(5):
+    for k in range(5):#lecture des cartes de la table
         if isValid(int2bin(deck.index(card2int(l[k])) - k),k):
             tmp = []
             for qqc in toret:
@@ -184,10 +184,15 @@ def recupXagain(s):
                 toadd+= [qqc+convert(int2bin(deck.index(card2int(l[k]))-k),k)]
             toret = toadd
         makePerm(k, deck.index(card2int(l[k])), deck)
-    tmp = []
+    toadd = []
     for k in toret:
-        tmp+=[k+int2bin(card2int(l[5])-5)[0]+int2bin(card2int(l[5])-5)[1]]
-    toret = tmp
+        toadd += [k+complete(int2bin(card2int(l[5])-5))[0]+complete(int2bin(card2int(l[5])-5))[1]]
+    else:
+        toadd = []
+        for d in toret:
+            toadd += [d + complete(int2bin(card2int(l[5]) - 5))[0]+complete(int2bin(card2int(l[5]) - 5))[1]]
+            toadd += [d + convert(complete(int2bin(card2int(l[5]) - 5)), 5)[0]+convert(complete(int2bin(card2int(l[5]) - 5)), 5)[1]]
+    toret = toadd
 
     return toret
 
