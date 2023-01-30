@@ -197,7 +197,7 @@ def recupXagain(s):
     return toret
 
 
-def x32bitsTo48bits(x0,x1):
+"""def x32bitsTo48bits(x0,x1):
     '''
 
     :param x0: graine en 32 bits
@@ -212,9 +212,33 @@ def x32bitsTo48bits(x0,x1):
     return f
 
 #TODO regler le problème des 2 derniers bits
+"""
+
+def suivant(x):
+    a = 25214903917
+    c = 11
+    m = 2**48
+
+    return (a*x+c) % m
 
 
+def x32bitsTo48bits(x0,x1):
+    '''
+    :param x0: graine en 32 bits
+    :param x1: f(x0) en 32 bits
+    :return: x0 sur 48 bits
+    '''
+ 
+    x = x0
+    x *= 2**16
 
+    for k in range(2**16):
+        if (suivant(x) // 2**16) == x1:
+            print("hey")
+            return x
+        x += 1
+        
+    return None
 
 
 

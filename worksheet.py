@@ -35,7 +35,11 @@ print(projet.card2int("6 de CARREAU"))
 print(projet.card2int("1 de PIQUE"))
 print(projet.card2int(projet.getTable(projet.recupFile(),0)[0]))
 print(projet.recupXagain(projet.recupFile()))
-print(projet.x32bitsTo48bits(2042017850,-2276942239))
+
+
+
+
+print(projet.x32bitsTo48bits(1240844365, 760885998  ))
 
 # 10111001100110110001011001010011
 
