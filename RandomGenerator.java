@@ -31,9 +31,10 @@ public class RandomGenerator {
         int next = randomBits[currIndex];
         currIndex++;
         if(currIndex == 32) {
-            System.out.println("nouvel Entier generé");
+            int ca = generator.nextInt();
+            System.out.println("nouvel Entier generé: "+ca);
             currIndex = 0;
-            toBitArray(generator.nextInt());
+            toBitArray(ca);
             System.out.println(this);
         }
         return next;
