@@ -3,7 +3,11 @@ import java.util.TreeMap;
 public class Main {
     public static void main(String[] args) {
         RandomGenerator generator = new RandomGenerator();
-        diceThrowRepartition(generator, 1000000);
+        int[] arr = generator.getNextNBits(32);
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i]);
+        }
+        //diceThrowRepartition(generator, 1000000);
     }
 
     public static void diceThrowRepartition(RandomGenerator generator, int throwNumber) {

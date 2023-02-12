@@ -1,5 +1,1 @@
-mes cartes:9 de PIQUE;11 de PIQUE
-table:4 de TREFLE;11 de CARREAU;10 de TREFLE;6 de PIQUE;2 de TREFLE;
-j2:2 de COEUR;13 de PIQUE
-j3:3 de PIQUE;8 de PIQUE
-<>
+{"playerCards":[{"name":"Godefroy","cards":[{"couleur":"PIQUE","valeur":8},{"couleur":"COEUR","valeur":7}]},{"name":"Zoubir","cards":[{"couleur":"TREFLE","valeur":5},{"couleur":"COEUR","valeur":9}]},{"name":"Beckam","cards":[{"couleur":"TREFLE","valeur":10},{"couleur":"PIQUE","valeur":7}]},{"name":"Rigobert","cards":[null,null]}],"tableCards":[{"couleur":"CARREAU","valeur":6},{"couleur":"PIQUE","valeur":2},{"couleur":"CARREAU","valeur":5},{"couleur":"PIQUE","valeur":11},{"couleur":"COEUR","valeur":5}]}

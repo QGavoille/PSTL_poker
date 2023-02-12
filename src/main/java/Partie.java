@@ -1,3 +1,6 @@
+
+import com.google.gson.Gson;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -38,6 +41,14 @@ public class Partie {
         deal();
     }
 
+    public Player[] getJoueurs() {
+        return joueurs;
+    }
+
+    public Card[] getTable() {
+        return table;
+    }
+
     public String toString(){
         String s = "_______________________________________\n";
         for(Player p: joueurs){
@@ -64,7 +75,17 @@ public class Partie {
     }
 
     public void writeVisible(boolean append) throws IOException {
+        JSONableGameData j = new JSONableGameData(this);
+        Gson gson = new Gson();
+        String json = gson.toJson(j);
         FileWriter fr = new FileWriter("cards.projet",append);
+        BufferedWriter writer = new BufferedWriter(fr);
+        writer.write(json);
+        writer.newLine();
+        writer.close();
+
+
+        /*FileWriter fr = new FileWriter("cards.projet",append);
         BufferedWriter writer = new BufferedWriter(fr);
         writer.write("mes cartes:"+joueurs[3].getJeux()[0].toString()+";"+joueurs[3].getJeux()[1].toString());
         writer.newLine();
@@ -82,7 +103,7 @@ public class Partie {
         writer.newLine();
 
 
-        writer.close();
+        writer.close();*/
 
     }
 

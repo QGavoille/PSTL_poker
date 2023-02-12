@@ -19,7 +19,7 @@ print(projet.card2int('10 de PIQUE'))
 
 print(projet.int2bin(1))
 print(projet.int2bin(52))
-print(projet.isValid("001011",0))
+print(projet.isAmbiguous("001011", 0))
 
 print(projet.convert("001011",0))
 #print(projet.newRecupX(projet.recupFile()),12)

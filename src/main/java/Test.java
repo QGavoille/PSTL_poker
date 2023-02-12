@@ -7,15 +7,15 @@ public class Test {
     }
    /* public static void main(String[] args) throws IOException {
 
-        RandomGenerator r = new RandomGenerator();
+        src.main.java.RandomGenerator r = new src.main.java.RandomGenerator();
       System.out.println( r.toInt(new int[]{1, 1,1}));
-      CardGame c = new CardGame();
+      src.main.java.CardGame c = new src.main.java.CardGame();
 
 
       c.goodShuffle();
       print(c);
       print(c.checkInvariant());
-      Partie p = new Partie();
+      src.main.java.Partie p = new src.main.java.Partie();
       p.deal();
       System.out.println(p);
       p.writeVisible();
