@@ -35,7 +35,7 @@ print(projet.card2int("6 de CARREAU"))
 print(projet.card2int("1 de PIQUE"))
 print(projet.card2int(projet.getTable(projet.recupFile(),0)[0]))
 print(projet.recupXagain(projet.recupFile()))
-print(projet.x32bitsTo48bits(-341034718,256120180))
+print(projet.x32bitsTo48bits(-905360368,-1284485056))
 print(projet.listto48bits(projet.recupXagain(projet.recupFile()),projet.javaBitsToHumanInteger("00000010000010100000111011001101")))
 print(projet.javaBitsToHumanInteger("00001000001100101001000001010011"))
 
