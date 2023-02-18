@@ -21,6 +21,7 @@ public class Test {
       p.writeVisible();
     }*/
     public static void main(String[] args) throws IOException {
+        System.out.println("je suis modifié");
         CardGame c = new CardGame(new RandomGenerator());
         System.out.println(c);
        Partie p = new Partie();
@@ -48,5 +49,6 @@ public class Test {
 
        }
     }
+
 }
 

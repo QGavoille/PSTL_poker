@@ -21,7 +21,8 @@ public class Partie {
         joueurs[3] = new Player(3,"Godefroy",new Card[2]);
 
         deck = new CardGame(new RandomGenerator());
-        deck.badShuffle();
+        //deck.badShuffle();
+        deck.goodShuffle();
         table = new Card[5];
     }
     public void deal(){
@@ -37,7 +38,8 @@ public class Partie {
     }
     public void nvGame() throws IOException {
         deck = new CardGame(deck.getRandom());
-        deck.badShuffle();
+        //deck.badShuffle();
+        deck.goodShuffle();
         deal();
     }
 

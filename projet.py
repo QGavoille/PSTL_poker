@@ -1,4 +1,5 @@
 import json
+from typing import Tuple, List, Any
 
 
 class Game:
@@ -110,6 +111,7 @@ def makePerm(dep, ar, l=[k for k in range(51)]):
     return l
 
 
+
 def getx0(game: Game) -> list:
     '''
 
@@ -118,123 +120,85 @@ def getx0(game: Game) -> list:
     '''
     deck = [k for k in range(52)]
     x0 = [""]
-    l = [game.getTableData()[i] for i in range(5)]
-    for k in range(4):
+    l = [game.getTableData()[i] for i in range(5)]#recupt
+    for k in range(4): #recup les autes
         l += game.getPlayerData(k)["cards"][:2]
-    print(l)
     for k in range(5):  # lecture des cartes de la table
-        possible_values = []
-        possible_values += [complete(int2bin(deck.index(card2int(l[k])) - k))]
-        if isAmbiguous(int2bin(deck.index(card2int(l[k])) - k), k):
-            possible_values += [convert(complete(int2bin(deck.index(card2int(l[k])) - k)), k)]
-
-        new_x0 = []
-        for i in x0:
-            for j in possible_values:
-                new_x0.append(i + j)
-        x0 = new_x0
-        makePerm(k, deck.index(card2int(l[k])), deck)
-    # il faut récupérer 2 bits supplémentaires sur les cartes suivantes
-    carte_suivante = l[5]
-    print(carte_suivante)
-    possible_values = []
-    possible_values += [complete(int2bin(deck.index(card2int(carte_suivante)) - 5))]
-    if isAmbiguous(int2bin(deck.index(card2int(carte_suivante)) - 5), 5):
-        possible_values += [convert(complete(int2bin(deck.index(card2int(carte_suivante)) - 5)), 5)]
-
-    new_x0 = []
-    for i in x0:
-        for j in possible_values:
-            new_x0.append(i + j)
-    x0 = new_x0
-    makePerm(5, deck.index(card2int(carte_suivante)), deck)
-
-    # On récupère les 32 bits de poids faible
-    for i in range(len(x0)):
-        x0[i] = x0[i][-32:]
-    return x0
-
-
-def getx1(game: Game) -> list:
-    '''
-
-    :param game: objet Game représentant la partie
-    :return: tous les x1 possibles en représentation binaire avec les bits de poids fort à droite
-    '''
-    deck = [k for k in range(52)]
-    toret = [""]
-    l = [game.getTableData()[i] for i in range(5)] + [game.getPlayerData(k) for k in range(4)]
-    for k in range(5):  # lecture des cartes de la table
-        if isAmbiguous(int2bin(deck.index(card2int(l[k])) - k), k):
+        if not isAmbiguous(int2bin(deck.index(card2int(l[k]))-k),k):
             tmp = []
-            for qqc in toret:
-                tmp += [qqc + complete(int2bin(deck.index(card2int(l[k])) - k))]
-
-            toret = tmp
+            for qqc in x0:
+                tmp+= [qqc + complete(int2bin(deck.index(card2int(l[k])) - k))]
+            x0 = tmp
         else:
             toadd = []
-            for qqc in toret:
+            for qqc in x0:
                 toadd += [qqc + complete(int2bin(deck.index(card2int(l[k])) - k))]
                 toadd += [qqc + convert(int2bin(deck.index(card2int(l[k])) - k), k)]
-            toret = toadd
-        makePerm(k, deck.index(card2int(l[k])), deck)
-    toadd = []
-    for k in toret:
-        toadd += [k + complete(int2bin(card2int(l[5]) - 5))[0] + complete(int2bin(card2int(l[5]) - 5))[1]]
+            x0 = toadd
+        makePerm(k,deck.index(card2int(l[k])),deck)
+
+    if not isAmbiguous(int2bin(deck.index(card2int(l[5])) - 5), 5):
+        toadd = []
+        for qqc in x0:
+            toadd += [qqc + complete(int2bin(deck.index(card2int(l[5])) - 5))[0]+complete(int2bin(deck.index(card2int(l[5])) - 5))[1]]
     else:
         toadd = []
-        for d in toret:
-            toadd += [d + complete(int2bin(card2int(l[5]) - 5))[0] + complete(int2bin(card2int(l[5]) - 5))[1]]
-            toadd += [d + convert(complete(int2bin(card2int(l[5]) - 5)), 5)[0] +
-                      convert(complete(int2bin(card2int(l[5]) - 5)), 5)[1]]
-    toret = toadd
-
-    return toret
+        for qqc in x0:
+            toadd += [qqc + complete(int2bin(deck.index(card2int(l[5])) - 5))[0]+ complete(int2bin(deck.index(card2int(l[5])) - 5))[1]]
+            toadd += [qqc + convert(int2bin(deck.index(card2int(l[5])) - 5), 5)[0]+convert(int2bin(deck.index(card2int(l[5])) - 5), 5)[1]]
+    x0 = toadd
 
 
-def recupXagain(s):
-    '''
 
-    :param s: contenu du fichier
-    :return: x0
-    '''
-    deck = [k for k in range(52)]
-    l = []
-    toret = [""]
-    for k in range(5):
-        l += [getTable(s, 0)[k]]
-    l += [getMyCards(s, 0)[0]]
-    l += [getMyCards(s, 0)[1]]
-    l += [getNextPlayerCard(s, 0)[0]]
-    l += [getNextPlayerCard(s, 0)[1]]
-    l += [getNextNextPlayerCard(s, 0)[0]]
-    l += [getNextNextPlayerCard(s, 0)[1]]
-    for k in range(5):  # lecture des cartes de la table
-        if isAmbiguous(int2bin(deck.index(card2int(l[k])) - k), k):
+    return x0,deck
+
+
+
+def getx1(game: Game, deck) -> list:
+    x1 = []
+    deck = deck
+    l = [game.getTableData()[i] for i in range(5)]
+    for k in range(4):  # lecture des 4 premiers bits
+        l += game.getPlayerData(k)["cards"][:2]
+
+    if not isAmbiguous(int2bin(deck.index(card2int(l[5]))-5),5):
+        x1 += [complete(int2bin(deck.index(card2int(l[5]))-5))[2:]]
+    else:
+        x1+= [complete(int2bin(deck.index(card2int(l[5]))-5))[2:]]
+        x1+= [convert(int2bin(deck.index(card2int(l[5]))-5),5)[2:]]
+
+
+    makePerm(5, deck.index(card2int(l[5])), deck)
+    for k in range(4):#Lecture de 24bits
+        if not isAmbiguous(int2bin(deck.index(card2int(l[6+k]))-(6+k)), 6+k):
             tmp = []
-            for qqc in toret:
-                tmp += [qqc + complete(int2bin(deck.index(card2int(l[k])) - k))]
-
-            toret = tmp
+            for qqc in x1:
+                tmp+= [qqc +complete(int2bin(deck.index(card2int(l[6+k]))-(6+k)))]
+            x1 = tmp
         else:
-            toadd = []
-            for qqc in toret:
-                toadd += [qqc + complete(int2bin(deck.index(card2int(l[k])) - k))]
-                toadd += [qqc + convert(int2bin(deck.index(card2int(l[k])) - k), k)]
-            toret = toadd
-        makePerm(k, deck.index(card2int(l[k])), deck)
-    toadd = []
-    for k in toret:
-        toadd += [k + complete(int2bin(card2int(l[5]) - 5))[0] + complete(int2bin(card2int(l[5]) - 5))[1]]
+            tmp = []
+            for qqc in x1:
+                tmp += [qqc + complete(int2bin(deck.index(card2int(l[6+k])) - (6+k)))]
+                tmp += [qqc + convert(int2bin(deck.index(card2int(l[6+k])) - (6+k)), 6+k)]
+            x1 = tmp
+        makePerm(5+k,deck.index(card2int(l[5+k])),deck)
+    if not isAmbiguous(int2bin(deck.index(deck.index(card2int(l[10]))-10)),10):
+        tmp = []
+        for qqc in x1:
+           tmp += [qqc + complete(int2bin(deck.index(card2int(l[10]))-10))[0:5]]
     else:
-        toadd = []
-        for d in toret:
-            toadd += [d + complete(int2bin(card2int(l[5]) - 5))[0] + complete(int2bin(card2int(l[5]) - 5))[1]]
-            toadd += [d + convert(complete(int2bin(card2int(l[5]) - 5)), 5)[0] +
-                      convert(complete(int2bin(card2int(l[5]) - 5)), 5)[1]]
-    toret = toadd
+        tmp = []
+        for qqc in x1:
+            tmp += [qqc + complete(int2bin(deck.index(card2int(l[10]))-10))[0:4]]
+            tmp += [qqc + convert(int2bin(deck.index(card2int(l[10]))-10),10)[0:4]]
+        x1 = tmp
+    return x1
 
-    return toret
+
+
+
+
+
 
 
 
@@ -261,8 +225,8 @@ def javaBitsToHumanInteger(x02):
 
 def x32bitsTo48bits(x0, x1):
     '''
-    :param x0: graine en 32 bits
-    :param x1: f(x0) en 32 bits
+    :param x0: graine en 32 bits(int)
+    :param x1: f(x0) en 32 bits(int)
     :return: x0 sur 48 bits
     '''
 
@@ -276,7 +240,10 @@ def x32bitsTo48bits(x0, x1):
             nx1 = x1+(2**32)
         if d == nx1:
             print("hey")
-            return x
+            if x<0:
+                return x+2**48
+            else:
+                return x
         x += 1
 
     return None
@@ -287,3 +254,78 @@ def listto48bits(l,x1):
         if x32bitsTo48bits(javaBitsToHumanInteger(k), x1) is not None:
             ret += [x32bitsTo48bits(javaBitsToHumanInteger(k), x1)]
     return ret
+
+def cut (x0):
+    '''
+    coupe x0 en 5 paquets de 5 bits plus 1 packet de 2 bits
+    :param x0:
+    :return:
+    '''
+    l = []
+    for k in range(5):
+        l+= [x0[k*6:6*k+6]]
+    return l+[x0[-2:]]
+
+def uncut(l):
+    '''
+    inverse de cut
+    :param l:
+    :return:
+    '''
+    x0 = ""
+    for k in l:
+        x0 += k
+    return x0
+
+def trouveX0x1fixe(x0,x1):
+    '''
+    On donne le x0 lu dans les cartes et un x1 fixé.
+    L'algorithme vas alors tester si le x0 lu corresponds bien au x1 donné par l'utilisateur
+    Si ce n'est pas le cas il vas alors supposer qu'il y'a eu 1 rejet ie que 6 bits sont faux.
+    alors il vas tester si le rejet a eu lieu au 1er groupe de 6 bits ( 12 possibilitées), puis au 2eme,...
+    Si on echoue avec 1 rejet on passe a 2 etc.
+    :param x0: string
+    :param x1:string
+    :return:
+    '''
+
+    if not x32bitsTo48bits(b2tob10(x0),b2tob10(x1)) is None: #cas ou 0 rejet
+        return x0
+
+    else:
+        for k in range(5):#cas ou il y'a un rejet
+            print("k = ",k)
+            for l in range(12):
+                print("l=",l)
+                res = cut(x0)
+                res.insert(k,complete(int2bin(52+l)))
+                res = res[:6]
+                res = uncut(res)[:32]
+                if k == 2 and l == 6:
+                    print("passé")
+
+                if not x32bitsTo48bits(b2tob10(res),b2tob10(x1)) is None:
+                    return res
+        return None
+
+        for k in range(5): #cas ou 2 rejets
+            d = cut(x0)
+            for l in [x for x in range(5) if x>k]:
+                for j in range(13):
+                    d[k] = complete(int2bin(52+j))
+                    for n in range(13):
+                        d[k] = complete(int2bin(52+n))
+                        r = uncut(d)
+                        if not x32bitsTo48bits(b2tob10(r),b2tob10(x1)) is None:
+                            return r
+    return None
+
+
+
+
+
+
+
+
+
+
