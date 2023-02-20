@@ -301,23 +301,33 @@ def trouveX0x1fixe(x0,x1):
                 res.insert(k,complete(int2bin(52+l)))
                 res = res[:6]
                 res = uncut(res)[:32]
-                if k == 2 and l == 6:
-                    print("passé")
+
 
                 if not x32bitsTo48bits(b2tob10(res),b2tob10(x1)) is None:
                     return res
-        return None
-
         for k in range(5): #cas ou 2 rejets
+            print("2 rejets")
+            print("k = ", k)
             d = cut(x0)
-            for l in [x for x in range(5) if x>k]:
-                for j in range(13):
-                    d[k] = complete(int2bin(52+j))
-                    for n in range(13):
-                        d[k] = complete(int2bin(52+n))
-                        r = uncut(d)
+            for l in [x for x in range(5) if x>=k]:
+                print("l = ",l)
+                for j in range(12):
+                    #TODO rajouter les cut au bon endroit
+                    print("j = ", j)
+                    d.insert(k, complete(int2bin(52+j)))
+                    for n in range(12):
+                        print("n = ", n )
+                        d.insert(l, complete(int2bin(52+n)))
+                        d = d[:6]
+
+                        r = uncut(d)[:32]
+                        if(k==0 and l == 4 and j == 3 and n ==10):
+                            print("passé")
+                            print(d)
+                            print(r)
                         if not x32bitsTo48bits(b2tob10(r),b2tob10(x1)) is None:
                             return r
+                    d = cut(x0)
     return None
 
 
