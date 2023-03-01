@@ -293,44 +293,66 @@ def trouveX0x1fixe(x0,x1):
         return x0
 
     else:
-        for k in range(5):#cas ou il y'a un rejet
-
-            for l in range(12):
-
-                res = cut(x0)
-                res.insert(k,complete(int2bin(52+l)))
-                res = res[:6]
-                res = uncut(res)[:32]
-
-
-                if not x32bitsTo48bits(b2tob10(res),b2tob10(x1)) is None:
-                    return res
-        for k in range(5): #cas ou 2 rejets
-
-            d = cut(x0)
-            for l in [x for x in range(5) if x>=k]:
-
-                for j in range(12):
-                    d = cut(x0)
-                    d.insert(k, complete(int2bin(52+j-k)))
-                    d = d[:6]
-                    save = d.copy()
-                    for n in range(12):
-                        d = save.copy()
-                        d.insert(l+k, complete(int2bin(52+n-l)))
+    #     for k in range(5):#cas ou il y'a un rejet
+    #
+    #         for l in range(12):
+    #
+    #             res = cut(x0)
+    #             res.insert(k,complete(int2bin(52+l-k)))
+    #             res = res[:6]
+    #             res = uncut(res)[:32]
+    #
+    #
+    #             if not x32bitsTo48bits(b2tob10(res),b2tob10(x1)) is None:
+    #                 return res
+    #
+    #     for k in range(5): #cas ou 2 rejets
+    #
+    #         d = cut(x0)
+    #         for l in [x for x in range(5) if x>=k]:
+    #
+    #             for j in range(12):
+    #                 d = cut(x0)
+    #                 d.insert(k, complete(int2bin(52+j-k)))
+    #                 d = d[:6]
+    #                 save = d.copy()
+    #                 for n in range(12):
+    #                     d = save.copy()
+    #                     d.insert(l, complete(int2bin(52+n-l)))
+    #                     d = d[:6]
+    #
+    #
+    #                     r = uncut(d)[:32]
+    #                     if not x32bitsTo48bits(b2tob10(r),b2tob10(x1)) is None:
+    #                         return r
+    #                     d = save.copy()
+    #
+    #                 d = cut(x0).copy()
+        print("3 rejets")
+        for i in range(5): #cas ou 3 rejets
+            for j in range(i,5):
+                for k in range(j,5):
+                    for i2 in range(12):
+                        d = cut(x0).copy()
+                        d.insert(i,complete(int2bin(52+i2-i)))
                         d = d[:6]
-
-
-                        r = uncut(d)[:32]
-                        if(k==0 and l == 2 and j == 6 and n ==1):
-                            print("passé")
-                            print(d)
-                            print(r)
-                        if not x32bitsTo48bits(b2tob10(r),b2tob10(x1)) is None:
-                            return r
+                        save = d.copy()
+                        for j2 in range(12):
+                            d = save.copy()
+                            d.insert(j,complete(int2bin(52+j2-j)))
+                            d = d[:6]
+                            save2 = d.copy()
+                            for k2 in range(12):
+                                d = save2.copy()
+                                d.insert(k,complete(int2bin(52+k2-k)))
+                                d = d[:6]
+                                r = uncut(d)[:32]
+                            if not x32bitsTo48bits(b2tob10(r),b2tob10(x1)) is None:
+                                return r
+                            d = save2.copy()
                         d = save.copy()
+                    d = cut(x0)
 
-                    d = cut(x0).copy()
     return None
 
 
