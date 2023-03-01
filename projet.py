@@ -55,7 +55,7 @@ def complete(i):
     :param i: entiers
     :return:  i completer de 0 a droite
     '''
-    while len(i) != 6:
+    while len(i) < 6:
         i = i + "0"
     return i
 
@@ -336,33 +336,44 @@ def trouveX0x1fixe(x0,x1):
         for i in range(6): #cas ou 3 rejets
             for j in range(i,6):
                 for k in range(j,6):
-                    for i2 in range(12):
-                        d = cut(x0).copy()
-                        d.insert(i,complete(int2bin(52+i2)))
-                        d = d[:6]
-                        r = uncut(d)[:32]
-                        if not x32bitsTo48bits(b2tob10(r), b2tob10(x1)) is None:
-                            return r
-                        save = d.copy()
-                        for j2 in range(12):
-                            d = save.copy()
-                            d.insert(j,complete(int2bin(52+j2)))
+                    for l in range(k,6):
+                        for i2 in range(12):
+                            d = cut(x0).copy()
+                            d.insert(i,complete(int2bin(52+i2)))
                             d = d[:6]
                             r = uncut(d)[:32]
-                            save2 = d.copy()
-                            if not x32bitsTo48bits(b2tob10(r),b2tob10(x1)) is None:
+                            if not x32bitsTo48bits(b2tob10(r), b2tob10(x1)) is None:
                                 return r
-                            for k2 in range(12):
-
-                                d = save2.copy()
-                                d.insert(k,complete(int2bin(52+k2)))
+                            save = d.copy()
+                            for j2 in range(12):
+                                d = save.copy()
+                                d.insert(j,complete(int2bin(52+j2)))
                                 d = d[:6]
                                 r = uncut(d)[:32]
-                            if not x32bitsTo48bits(b2tob10(r),b2tob10(x1)) is None:
-                                return r
-                            d = save2.copy()
-                        d = save.copy()
-                    d = cut(x0)
+                                save2 = d.copy()
+                                if not x32bitsTo48bits(b2tob10(r),b2tob10(x1)) is None:
+                                    return r
+                                for k2 in range(12):
+
+                                    d = save2.copy()
+                                    d.insert(k,complete(int2bin(52+k2)))
+                                    d = d[:6]
+                                    r = uncut(d)[:32]
+                                    save3 = d.copy()
+                                    if not x32bitsTo48bits(b2tob10(r),b2tob10(x1)) is None:
+                                        return r
+                                    for l2 in range(12):
+                                        d = save3.copy()
+                                        d.insert(l,complete(int2bin(52+l2)))
+                                        d = d[:6]
+                                        r = uncut(d)[:32]
+                                        save4 = d.copy()
+                                        if not x32bitsTo48bits(b2tob10(r), b2tob10(x1)) is None:
+                                            return r
+
+                                d = save2.copy()
+                            d = save.copy()
+                        d = cut(x0)
 
     return None
 
