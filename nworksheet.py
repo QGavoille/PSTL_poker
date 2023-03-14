@@ -3,10 +3,10 @@ import projet
 test = projet.Game("cards.projet")
 x0_matches = projet.getx0(test)
 print((x0_matches[0]))
-print(projet.cut("10011110111101101100011101001110"), " le vrais")
+print(projet.cut("01100010111000111101011001111111"), " le vrais")
 c = x0_matches[0][0]
-print(projet.cut(c)," le trouvé")
-print(projet.trouveX0x1fixe(x0_matches[0][0],"11110001011000101001111000001100"))
+print(projet.cut(c), " le trouvé")
+print(projet.trouvex0x1fixe(x0_matches[0][0], "11110110110111111010011100111101"))
 
 '''
 x0 = x0_matches[0][0]

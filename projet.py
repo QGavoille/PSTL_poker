@@ -1,5 +1,6 @@
 import json
 from typing import Tuple, List, Any
+import numpy as np
 
 
 class Game:
@@ -71,6 +72,7 @@ def b2tob10(i):
         cpt += (2 ** k) * int(i[k])
     return cpt
 
+
 def isAmbiguous(bits, decalage):
     '''
 
@@ -111,7 +113,6 @@ def makePerm(dep, ar, l=[k for k in range(51)]):
     return l
 
 
-
 def getx0(game: Game) -> list:
     '''
 
@@ -120,14 +121,14 @@ def getx0(game: Game) -> list:
     '''
     deck = [k for k in range(52)]
     x0 = [""]
-    l = [game.getTableData()[i] for i in range(5)]#recupt
-    for k in range(4): #recup les autes
+    l = [game.getTableData()[i] for i in range(5)]  # recupt
+    for k in range(4):  # recup les autes
         l += game.getPlayerData(k)["cards"][:2]
     for k in range(5):  # lecture des cartes de la table
-        if not isAmbiguous(int2bin(deck.index(card2int(l[k]))-k),k):
+        if not isAmbiguous(int2bin(deck.index(card2int(l[k])) - k), k):
             tmp = []
             for qqc in x0:
-                tmp+= [qqc + complete(int2bin(deck.index(card2int(l[k])) - k))]
+                tmp += [qqc + complete(int2bin(deck.index(card2int(l[k])) - k))]
             x0 = tmp
         else:
             toadd = []
@@ -135,23 +136,23 @@ def getx0(game: Game) -> list:
                 toadd += [qqc + complete(int2bin(deck.index(card2int(l[k])) - k))]
                 toadd += [qqc + convert(int2bin(deck.index(card2int(l[k])) - k), k)]
             x0 = toadd
-        makePerm(k,deck.index(card2int(l[k])),deck)
+        makePerm(k, deck.index(card2int(l[k])), deck)
 
     if not isAmbiguous(int2bin(deck.index(card2int(l[5])) - 5), 5):
         toadd = []
         for qqc in x0:
-            toadd += [qqc + complete(int2bin(deck.index(card2int(l[5])) - 5))[0]+complete(int2bin(deck.index(card2int(l[5])) - 5))[1]]
+            toadd += [qqc + complete(int2bin(deck.index(card2int(l[5])) - 5))[0] +
+                      complete(int2bin(deck.index(card2int(l[5])) - 5))[1]]
     else:
         toadd = []
         for qqc in x0:
-            toadd += [qqc + complete(int2bin(deck.index(card2int(l[5])) - 5))[0]+ complete(int2bin(deck.index(card2int(l[5])) - 5))[1]]
-            toadd += [qqc + convert(int2bin(deck.index(card2int(l[5])) - 5), 5)[0]+convert(int2bin(deck.index(card2int(l[5])) - 5), 5)[1]]
+            toadd += [qqc + complete(int2bin(deck.index(card2int(l[5])) - 5))[0] +
+                      complete(int2bin(deck.index(card2int(l[5])) - 5))[1]]
+            toadd += [qqc + convert(int2bin(deck.index(card2int(l[5])) - 5), 5)[0] +
+                      convert(int2bin(deck.index(card2int(l[5])) - 5), 5)[1]]
     x0 = toadd
 
-
-
-    return x0,deck
-
+    return x0, deck
 
 
 def getx1(game: Game, deck) -> list:
@@ -161,49 +162,40 @@ def getx1(game: Game, deck) -> list:
     for k in range(4):  # lecture des 4 premiers bits
         l += game.getPlayerData(k)["cards"][:2]
 
-    if not isAmbiguous(int2bin(deck.index(card2int(l[5]))-5),5):
-        x1 += [complete(int2bin(deck.index(card2int(l[5]))-5))[2:]]
+    if not isAmbiguous(int2bin(deck.index(card2int(l[5])) - 5), 5):
+        x1 += [complete(int2bin(deck.index(card2int(l[5])) - 5))[2:]]
     else:
-        x1+= [complete(int2bin(deck.index(card2int(l[5]))-5))[2:]]
-        x1+= [convert(int2bin(deck.index(card2int(l[5]))-5),5)[2:]]
-
+        x1 += [complete(int2bin(deck.index(card2int(l[5])) - 5))[2:]]
+        x1 += [convert(int2bin(deck.index(card2int(l[5])) - 5), 5)[2:]]
 
     makePerm(5, deck.index(card2int(l[5])), deck)
-    for k in range(4):#Lecture de 24bits
-        if not isAmbiguous(int2bin(deck.index(card2int(l[6+k]))-(6+k)), 6+k):
+    for k in range(4):  # Lecture de 24bits
+        if not isAmbiguous(int2bin(deck.index(card2int(l[6 + k])) - (6 + k)), 6 + k):
             tmp = []
             for qqc in x1:
-                tmp+= [qqc +complete(int2bin(deck.index(card2int(l[6+k]))-(6+k)))]
+                tmp += [qqc + complete(int2bin(deck.index(card2int(l[6 + k])) - (6 + k)))]
             x1 = tmp
         else:
             tmp = []
             for qqc in x1:
-                tmp += [qqc + complete(int2bin(deck.index(card2int(l[6+k])) - (6+k)))]
-                tmp += [qqc + convert(int2bin(deck.index(card2int(l[6+k])) - (6+k)), 6+k)]
+                tmp += [qqc + complete(int2bin(deck.index(card2int(l[6 + k])) - (6 + k)))]
+                tmp += [qqc + convert(int2bin(deck.index(card2int(l[6 + k])) - (6 + k)), 6 + k)]
             x1 = tmp
-        makePerm(5+k,deck.index(card2int(l[5+k])),deck)
-    if not isAmbiguous(int2bin(deck.index(deck.index(card2int(l[10]))-10)),10):
+        makePerm(5 + k, deck.index(card2int(l[5 + k])), deck)
+    if not isAmbiguous(int2bin(deck.index(deck.index(card2int(l[10])) - 10)), 10):
         tmp = []
         for qqc in x1:
-           tmp += [qqc + complete(int2bin(deck.index(card2int(l[10]))-10))[0:5]]
+            tmp += [qqc + complete(int2bin(deck.index(card2int(l[10])) - 10))[0:5]]
     else:
         tmp = []
         for qqc in x1:
-            tmp += [qqc + complete(int2bin(deck.index(card2int(l[10]))-10))[0:4]]
-            tmp += [qqc + convert(int2bin(deck.index(card2int(l[10]))-10),10)[0:4]]
+            tmp += [qqc + complete(int2bin(deck.index(card2int(l[10])) - 10))[0:4]]
+            tmp += [qqc + convert(int2bin(deck.index(card2int(l[10])) - 10), 10)[0:4]]
         x1 = tmp
     return x1
 
 
-
-
-
-
-
-
-
-
-#TODO regler le problème des 2 derniers bits
+# TODO regler le problème des 2 derniers bits
 
 
 def suivant(x):
@@ -212,7 +204,6 @@ def suivant(x):
     m = 2 ** 48
 
     return (a * x + c) % m
-
 
 
 def javaBitsToHumanInteger(x02):
@@ -236,26 +227,28 @@ def x32bitsTo48bits(x0, x1):
     for k in range(2 ** 16):
         d = (suivant(x) // 2 ** 16)
         nx1 = x1
-        if x1 <0 :
-            nx1 = x1+(2**32)
+        if x1 < 0:
+            nx1 = x1 + (2 ** 32)
         if d == nx1:
             print("hey")
-            if x<0:
-                return x+2**48
+            if x < 0:
+                return x + 2 ** 48
             else:
                 return x
         x += 1
 
     return None
 
-def listto48bits(l,x1):
+
+def listto48bits(l, x1):
     ret = []
     for k in l:
         if x32bitsTo48bits(javaBitsToHumanInteger(k), x1) is not None:
             ret += [x32bitsTo48bits(javaBitsToHumanInteger(k), x1)]
     return ret
 
-def cut (x0):
+
+def cut(x0):
     '''
     coupe x0 en 5 paquets de 5 bits plus 1 packet de 2 bits
     :param x0:
@@ -263,8 +256,9 @@ def cut (x0):
     '''
     l = []
     for k in range(5):
-        l+= [x0[k*6:6*k+6]]
-    return l+[x0[-2:]]
+        l += [x0[k * 6:6 * k + 6]]
+    return l + [x0[-2:]]
+
 
 def uncut(l):
     '''
@@ -277,7 +271,101 @@ def uncut(l):
         x0 += k
     return x0
 
-def trouveX0x1fixe(x0,x1):
+
+def trouvex0x1fixe1r(x0, x1):
+    for i in range(6):
+        for i2 in range(12):
+            d = cut(x0)
+            d.insert(i, complete(int2bin(52 + i2)))
+            d = d[:6]
+            r = uncut(d)[:32]
+            if not x32bitsTo48bits(b2tob10(r), b2tob10(x1)) is None:
+                return r
+
+
+def trouvex0x1fixe2r(x0, x1):
+    for i in range(6):
+        for j in range(i + 1, 6):
+            for i2 in range(12):
+                d = cut(x0)
+                d.insert(i, complete(int2bin(52 + i2)))
+                d = d[:6]
+                r = uncut(d)[:32]
+                for j2 in range(12):
+                    d2 = cut(r)
+                    d2.insert(j, complete(int2bin(52 + j2)))
+                    d2 = d2[:6]
+                    r2 = uncut(d2)[:32]
+                    if not x32bitsTo48bits(b2tob10(r2), b2tob10(x1)) is None:
+                        return r2
+
+
+def trouvex0x1fixe3r(x0, x1):
+    for i in range(6):
+        print("i change", i)
+        for j in range(i + 1, 6):
+
+            for k in range(j + 1, 6):
+                print("k change: ", k)
+                for i2 in range(12):
+                    print("i2 change", i2)
+                    d = cut(x0)
+                    d.insert(i, complete(int2bin(52 + i2)))
+                    d = d[:6]
+                    r = uncut(d)[:32]
+
+                    for j2 in range(12):
+                        d2 = cut(r)
+                        d2.insert(j, complete(int2bin(52 + j2)))
+                        d2 = d2[:6]
+                        r2 = uncut(d2)[:32]
+
+                        for k2 in range(12):
+                            d3 = cut(r2)
+                            d3.insert(k, complete(int2bin(52 + k2)))
+                            d3 = d3[:6]
+                            r3 = uncut(d3)[:32]
+                            if not x32bitsTo48bits(b2tob10(r3), b2tob10(x1)) is None:
+                                return r3
+
+
+def trouvex0x1fixe4r(x0, x1):
+    for i in range(6):
+        print("i change", i)
+        for j in range(i + 1, 6):
+            for k in range(j + 1, 6):
+                for l in range(k + 1, 6):
+
+                    print("k change: ", k)
+                    for i2 in range(12):
+                        print("i2 change", i2)
+                        d = cut(x0)
+                        d.insert(i, complete(int2bin(52 + i2)))
+                        d = d[:6]
+                        r = uncut(d)[:32]
+
+                        for j2 in range(12):
+                            d2 = cut(r)
+                            d2.insert(j, complete(int2bin(52 + j2)))
+                            d2 = d2[:6]
+                            r2 = uncut(d2)[:32]
+
+                            for k2 in range(12):
+                                d3 = cut(r2)
+                                d3.insert(k, complete(int2bin(52 + k2)))
+                                d3 = d3[:6]
+                                r3 = uncut(d3)[:32]
+
+                                for l2 in range(12):
+                                    d4 = cut(r3)
+                                    d4.insert(k, complete(int2bin(52 + l2)))
+                                    d4 = d4[:6]
+                                    r4 = uncut(d4)[:32]
+                                    if not x32bitsTo48bits(b2tob10(r4), b2tob10(x1)) is None:
+                                        return r4
+
+
+def trouvex0x1fixe(x0, x1):
     '''
     On donne le x0 lu dans les cartes et un x1 fixé.
     L'algorithme vas alors tester si le x0 lu corresponds bien au x1 donné par l'utilisateur
@@ -289,100 +377,20 @@ def trouveX0x1fixe(x0,x1):
     :return:
     '''
 
-    if not x32bitsTo48bits(b2tob10(x0),b2tob10(x1)) is None: #cas ou 0 rejet
+    if not x32bitsTo48bits(b2tob10(x0), b2tob10(x1)) is None:  # cas ou 0 rejet
         return x0
+    d = trouvex0x1fixe1r(x0,x1)
+    if d is not None:
+        return d
+    d = trouvex0x1fixe2r(x0,x1)
+    if d is not None:
+        return d
+    d = trouvex0x1fixe3r(x0,x1)
+    if d is not None:
+        return d
+    d = trouvex0x1fixe4r(x0,x1)
+    if d is not None:
+        return d
 
-    else:
-        # for k in range(5):#cas ou il y'a un rejet
-        #
-        #     for l in range(12):
-        #
-        #         res = cut(x0)
-        #         res.insert(k,complete(int2bin(52+l-k)))
-        #         res = res[:6]
-        #         res = uncut(res)[:32]
-        #
-        #
-        #         if not x32bitsTo48bits(b2tob10(res),b2tob10(x1)) is None:
-        #             return res
-        #
-        # for k in range(5): #cas ou 2 rejets
-        #
-        #     d = cut(x0)
-        #     for l in [x for x in range(5) if x>=k]:
-        #
-        #         for j in range(12):
-        #             d = cut(x0)
-        #
-        #
-        #             d.insert(k, complete(int2bin(52+j)))
-        #
-        #             d = d[:6]
-        #             save = d.copy()
-        #             for n in range(12):
-        #                 d = save.copy()
-        #                 d.insert(l, complete(int2bin(52+n)))
-        #                 d = d[:6]
-        #                 r = uncut(d)[:32]
-        #                 if k ==2 and l == 3 and 52+j-k == 60 and 52+n-l ==  62 :
-        #                     print(d)
-        #
-        #                 if not x32bitsTo48bits(b2tob10(r),b2tob10(x1)) is None:
-        #                     return r
-        #                 d = save.copy()
-        #
-        #             d = cut(x0).copy()
-        print("3 rejets")
-        for i in range(6): #cas ou 3 rejets
-            for j in range(i,6):
-                for k in range(j,6):
-                    for l in range(k,6):
-                        for i2 in range(12):
-                            d = cut(x0).copy()
-                            d.insert(i,complete(int2bin(52+i2)))
-                            d = d[:6]
-                            r = uncut(d)[:32]
-                            if not x32bitsTo48bits(b2tob10(r), b2tob10(x1)) is None:
-                                return r
-                            save = d.copy()
-                            for j2 in range(12):
-                                d = save.copy()
-                                d.insert(j,complete(int2bin(52+j2)))
-                                d = d[:6]
-                                r = uncut(d)[:32]
-                                save2 = d.copy()
-                                if not x32bitsTo48bits(b2tob10(r),b2tob10(x1)) is None:
-                                    return r
-                                for k2 in range(12):
-
-                                    d = save2.copy()
-                                    d.insert(k,complete(int2bin(52+k2)))
-                                    d = d[:6]
-                                    r = uncut(d)[:32]
-                                    save3 = d.copy()
-                                    if not x32bitsTo48bits(b2tob10(r),b2tob10(x1)) is None:
-                                        return r
-                                    for l2 in range(12):
-                                        d = save3.copy()
-                                        d.insert(l,complete(int2bin(52+l2)))
-                                        d = d[:6]
-                                        r = uncut(d)[:32]
-                                        save4 = d.copy()
-                                        if not x32bitsTo48bits(b2tob10(r), b2tob10(x1)) is None:
-                                            return r
-
-                                d = save2.copy()
-                            d = save.copy()
-                        d = cut(x0)
 
     return None
-
-
-
-
-
-
-
-
-
-
