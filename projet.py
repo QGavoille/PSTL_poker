@@ -379,18 +379,22 @@ def trouvex0x1fixe(x0, x1):
 
     if not x32bitsTo48bits(b2tob10(x0), b2tob10(x1)) is None:  # cas ou 0 rejet
         return x0
-    d = trouvex0x1fixe1r(x0,x1)
+    d = trouvex0x1fixe1r(x0, x1)
     if d is not None:
         return d
-    d = trouvex0x1fixe2r(x0,x1)
+    d = trouvex0x1fixe2r(x0, x1)
     if d is not None:
         return d
-    d = trouvex0x1fixe3r(x0,x1)
+    d = trouvex0x1fixe3r(x0, x1)
     if d is not None:
         return d
-    d = trouvex0x1fixe4r(x0,x1)
+    d = trouvex0x1fixe4r(x0, x1)#TODO s'arreter
     if d is not None:
         return d
-
 
     return None
+#TODO faire les calculs théoriques sur le nombre de moyen de rejets
+#TODO integrer les distributions statistiques
+#TODO ranger le git
+#TODO Traiter x0 et x1 commme un gros paquet de 64 bits
+#TODO installer pypy
