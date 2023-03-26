@@ -55,8 +55,8 @@ public class CardGame {
         writer.write("le melange");
         int translation = 0;
         for(int i = 0; i<52;i++){
-            System.out.print(((int)log2(51-i))+1);
-            System.out.println("   "+(51-i));
+           // System.out.print(((int)log2(51-i))+1);
+           // System.out.println("   "+(51-i));
             int nextPos = translation+random.nextInt(((int)log2(51-i))+1)%(52-i);
             writer.write(deck[i].toString()+" <-> "+ deck[nextPos].toString());
             writer.newLine();
