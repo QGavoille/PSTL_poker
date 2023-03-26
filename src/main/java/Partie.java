@@ -21,8 +21,8 @@ public class Partie {
         joueurs[3] = new Player(3,"Godefroy",new Card[2]);
 
         deck = new CardGame(new RandomGenerator());
-        //deck.badShuffle();
-        deck.goodShuffle();
+        deck.badShuffle();
+        //deck.goodShuffle();
         table = new Card[5];
     }
     public void deal(){
@@ -51,6 +51,7 @@ public class Partie {
         return table;
     }
 
+    public CardGame getDeck(){return deck;}
     public String toString(){
         String s = "_______________________________________\n";
         for(Player p: joueurs){

@@ -11,6 +11,19 @@ public class Card {
 
 
     }
+    public int toInt(){
+        if(couleur == Couleur.PIQUE) {
+            return value;
+        } else if (couleur == Couleur.TREFLE) {
+            return value+12;
+
+        } else if (couleur == Couleur.COEUR) {
+            return value+25;
+
+        }else {
+            return value+38;
+        }
+    }
 
     public int getValue() {
         return value;

@@ -133,4 +133,7 @@ public class CardGame {
         return random;
     }
 
+    public Card[] getDeck() {
+        return deck;
+    }
 }
