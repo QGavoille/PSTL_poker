@@ -1,6 +1,6 @@
 import json
+import time
 from typing import Tuple, List, Any
-import numpy as np
 
 
 class Game:
@@ -113,7 +113,7 @@ def makePerm(dep, ar, l=[k for k in range(51)]):
     return l
 
 
-def getx0(game: Game) -> list:
+def getx0(game: Game) -> tuple[list[Any], list[int]]:
     '''
 
     :param game: objet Game représentant la partie
@@ -193,6 +193,18 @@ def getx1(game: Game, deck) -> list:
             tmp += [qqc + convert(int2bin(deck.index(card2int(l[10])) - 10), 10)[0:4]]
         x1 = tmp
     return x1
+
+
+def getBitCardInfo(game: Game) -> tuple[str, list[int]]:
+    data = [game.getTableData()[i] for i in range(5)]
+    deck = [k for k in range(52)]
+    data_ret = ""
+    for k in range(4):
+        data += game.getPlayerData(k)["cards"][:2]
+    for k in range(5 + 6):
+        data_ret += complete(int2bin(deck.index(card2int(data[k])) - k))
+        makePerm(k, deck.index(card2int(data[k])), deck)
+    return data_ret[:64], deck
 
 
 # TODO regler le problème des 2 derniers bits
@@ -388,13 +400,265 @@ def trouvex0x1fixe(x0, x1):
     d = trouvex0x1fixe3r(x0, x1)
     if d is not None:
         return d
-    d = trouvex0x1fixe4r(x0, x1)#TODO s'arreter
+    d = trouvex0x1fixe4r(x0, x1)  # TODO s'arreter
     if d is not None:
         return d
 
     return None
-#TODO faire les calculs théoriques sur le nombre de moyen de rejets
-#TODO integrer les distributions statistiques
-#TODO ranger le git
-#TODO Traiter x0 et x1 commme un gros paquet de 64 bits
-#TODO installer pypy
+# TODO faire les calculs théoriques sur le nombre de moyen de rejets
+# TODO integrer les distributions statistiques
+# TODO ranger le git
+# TODO Traiter x0 et x1 commme un gros paquet de 64 bits
+# TODO installer pypy
+
+
+def cut64bits(x0x1):
+    """Cut a 64 bits string into 10 groups of 6 bits and a 4 bits group"""
+    d = []
+    for i in range(10):
+        d.append(x0x1[i * 6:(i + 1) * 6])
+    d.append(x0x1[60:])
+    return d
+
+
+def uncut64bits(d):
+    """Concatenate a list of 10 groups of 6 bits and a 4 bits group into a 64 bits string"""
+    x0x1 = ""
+    for i in range(10):
+        x0x1 += d[i]
+    x0x1 += d[10]
+    return x0x1
+
+
+def insert1rejet(x0x1):
+    print(cut64bits(x0x1))
+    for i in range(11):
+        for i2 in range(12):
+            d = cut64bits(x0x1)
+            d.insert(i, complete(int2bin(52 + i2)))
+            d = d[:11]
+            res = uncut64bits(d)[:64]
+            ret = x32bitsTo48bits(b2tob10(res[:32]), b2tob10(res[32:]))
+            if not (ret is None):
+                return ret
+
+    return None
+
+
+def insert2rejets(x0x1):
+    for i in range(10):
+        for j in range(i + 1, 11):
+            for i2 in range(12):
+                d = cut64bits(x0x1)
+                d.insert(i, complete(int2bin(52 + i2)))
+                d = d[:11]
+                x0x1 = uncut64bits(d)
+
+                for j2 in range(12):
+                    d2 = cut64bits(x0x1)
+                    d2.insert(j, complete(int2bin(52 + j2)))
+                    d2 = d2[:11]
+                    x0x1 = uncut64bits(d2)
+                    if not x32bitsTo48bits(b2tob10(x0x1[:32]), b2tob10(x0x1[32:])) is None:
+                        return x0x1
+
+    return None
+
+
+def insert3rejets(x0x1):
+    for i in range(9):
+        for j in range(i + 1, 10):
+            for k in range(j + 1, 11):
+                for i2 in range(12):
+                    d = cut64bits(x0x1)
+                    d.insert(i, complete(int2bin(52 + i2)))
+                    d = d[:11]
+                    x0x1 = uncut64bits(d)
+
+                    for j2 in range(12):
+                        d2 = cut64bits(x0x1)
+                        d2.insert(j, complete(int2bin(52 + j2)))
+                        d2 = d2[:11]
+                        x0x1 = uncut64bits(d2)
+
+                        for k2 in range(12):
+                            d3 = cut64bits(x0x1)
+                            d3.insert(k, complete(int2bin(52 + k2)))
+                            d3 = d3[:11]
+                            x0x1 = uncut64bits(d3)
+                            if not x32bitsTo48bits(b2tob10(x0x1[:32]), b2tob10(x0x1[32:])) is None:
+                                return x0x1
+
+    return None
+
+
+def insert4rejets(x0x1):
+    for i in range(8):
+        for j in range(i + 1, 9):
+            for k in range(j + 1, 10):
+                for l in range(k + 1, 11):
+                    for i2 in range(12):
+                        d = cut64bits(x0x1)
+                        d.insert(i, complete(int2bin(52 + i2)))
+                        d = d[:11]
+                        x0x1 = uncut64bits(d)
+
+                        for j2 in range(12):
+                            d2 = cut64bits(x0x1)
+                            d2.insert(j, complete(int2bin(52 + j2)))
+                            d2 = d2[:11]
+                            x0x1 = uncut64bits(d2)
+
+                            for k2 in range(12):
+                                d3 = cut64bits(x0x1)
+                                d3.insert(k, complete(int2bin(52 + k2)))
+                                d3 = d3[:11]
+                                x0x1 = uncut64bits(d3)
+
+                                for l2 in range(12):
+                                    d4 = cut64bits(x0x1)
+                                    d4.insert(l, complete(int2bin(52 + l2)))
+                                    d4 = d4[:11]
+                                    x0x1 = uncut64bits(d4)
+                                    if not x32bitsTo48bits(b2tob10(x0x1[:32]), b2tob10(x0x1[32:])) is None:
+                                        return x0x1
+
+    return None
+
+
+def insert5rejets(x0x1):
+    for i in range(7):
+        for j in range(i + 1, 8):
+            for k in range(j + 1, 9):
+                for l in range(k + 1, 10):
+                    for m in range(l + 1, 11):
+                        for i2 in range(12):
+                            d = cut64bits(x0x1)
+                            d.insert(i, complete(int2bin(52 + i2)))
+                            d = d[:11]
+                            x0x1 = uncut64bits(d)
+
+                            for j2 in range(12):
+                                d2 = cut64bits(x0x1)
+                                d2.insert(j, complete(int2bin(52 + j2)))
+                                d2 = d2[:11]
+                                x0x1 = uncut64bits(d2)
+
+                                for k2 in range(12):
+                                    d3 = cut64bits(x0x1)
+                                    d3.insert(k, complete(int2bin(52 + k2)))
+                                    d3 = d3[:11]
+                                    x0x1 = uncut64bits(d3)
+
+                                    for l2 in range(12):
+                                        d4 = cut64bits(x0x1)
+                                        d4.insert(l, complete(int2bin(52 + l2)))
+                                        d4 = d4[:11]
+                                        x0x1 = uncut64bits(d4)
+
+                                        for m2 in range(12):
+                                            d5 = cut64bits(x0x1)
+                                            d5.insert(m, complete(int2bin(52 + m2)))
+                                            d5 = d5[:11]
+                                            x0x1 = uncut64bits(d5)
+                                            if not x32bitsTo48bits(b2tob10(x0x1[:32]), b2tob10(x0x1[32:])) is None:
+                                                return x0x1
+
+    return None
+
+
+def insert6rejets(x0x1):
+    for i in range(6):
+        for j in range(i + 1, 7):
+            for k in range(j + 1, 8):
+                for l in range(k + 1, 9):
+                    for m in range(l + 1, 10):
+                        for n in range(m + 1, 11):
+                            for i2 in range(12):
+                                d = cut64bits(x0x1)
+                                d.insert(i, complete(int2bin(52 + i2)))
+                                d = d[:11]
+                                x0x1 = uncut64bits(d)
+
+                                for j2 in range(12):
+                                    d2 = cut64bits(x0x1)
+                                    d2.insert(j, complete(int2bin(52 + j2)))
+                                    d2 = d2[:11]
+                                    x0x1 = uncut64bits(d2)
+
+                                    for k2 in range(12):
+                                        d3 = cut64bits(x0x1)
+                                        d3.insert(k, complete(int2bin(52 + k2)))
+                                        d3 = d3[:11]
+                                        x0x1 = uncut64bits(d3)
+
+                                        for l2 in range(12):
+                                            d4 = cut64bits(x0x1)
+                                            d4.insert(l, complete(int2bin(52 + l2)))
+                                            d4 = d4[:11]
+                                            x0x1 = uncut64bits(d4)
+
+                                            for m2 in range(12):
+                                                d5 = cut64bits(x0x1)
+                                                d5.insert(m, complete(int2bin(52 + m2)))
+                                                d5 = d5[:11]
+                                                x0x1 = uncut64bits(d5)
+
+                                                for n2 in range(12):
+                                                    d6 = cut64bits(x0x1)
+                                                    d6.insert(n, complete(int2bin(52 + n2)))
+                                                    d6 = d6[:11]
+                                                    x0x1 = uncut64bits(d6)
+                                                    if not x32bitsTo48bits(b2tob10(x0x1[:32]), b2tob10(x0x1[32:])) is None:
+                                                        return x0x1
+
+    return None
+
+
+def trouveX0(x0x1 : str) -> int:
+    x0 = x0x1[:32]
+    x1 = x0x1[32:]
+    start = time.time()
+    X0 = x32bitsTo48bits(b2tob10(x0), b2tob10(x1))
+    end = time.time()
+    print("0 rejet : " + str(end - start))
+    if not (X0 is None):
+        return X0
+    start = time.time()
+    X0 = insert1rejet(x0x1)
+    end = time.time()
+    print("1 rejet : " + str(end - start))
+    if not (X0 is None):
+        return X0
+    start = time.time()
+    X0 = insert2rejets(x0x1)
+    end = time.time()
+    print("2 rejets : " + str(end - start))
+    if not (X0 is None):
+        return X0
+    start = time.time()
+    X0 = insert3rejets(x0x1)
+    end = time.time()
+    print("3 rejets : " + str(end - start))
+    if not (X0 is None):
+        return X0
+    start = time.time()
+    X0 = insert4rejets(x0x1)
+    end = time.time()
+    print("4 rejets : " + str(end - start))
+    if not (X0 is None):
+        return X0
+    start = time.time()
+    X0 = insert5rejets(x0x1)
+    end = time.time()
+    print("5 rejets : " + str(end - start))
+    if not (X0 is None):
+        return X0
+    start = time.time()
+    X0 = insert6rejets(x0x1)
+    end = time.time()
+    print("6 rejets : " + str(end - start))
+    if not (X0 is None):
+        return X0
+    raise Exception("Pas de X0 trouvé")
+
