@@ -11,10 +11,10 @@ public class RandomGenerator {
         currIndex = 0;
         randomBits = new int[32];
         int first = generator.nextInt();
-        System.out.print("l'entier: ");
-        System.out.println(first);
+       // System.out.print("l'entier: ");
+       // System.out.println(first);
         toBitArray(first);
-       System.out.println(this);
+      // System.out.println(this);
     }
 
     private void toBitArray(int number) {
@@ -32,10 +32,10 @@ public class RandomGenerator {
         currIndex++;
         if(currIndex == 32) {
             int ca = generator.nextInt();
-            System.out.println("nouvel Entier generé: "+ca);
+           // System.out.println("nouvel Entier generé: "+ca);
             currIndex = 0;
             toBitArray(ca);
-            System.out.println(this);
+           // System.out.println(this);
         }
         return next;
     }
