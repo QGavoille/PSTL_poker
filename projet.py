@@ -207,9 +207,6 @@ def getBitCardInfo(game: Game) -> tuple[str, list[int]]:
     return data_ret[:64], deck
 
 
-# TODO regler le problème des 2 derniers bits
-
-
 def suivant(x):
     a = 25214903917
     c = 11
@@ -492,129 +489,6 @@ def insert3rejets(x0x1):
     return None
 
 
-def insert4rejets(x0x1):
-    for i in range(8):
-        for j in range(i + 1, 9):
-            for k in range(j + 1, 10):
-                for l in range(k + 1, 11):
-                    for i2 in range(12):
-                        d = cut64bits(x0x1)
-                        d.insert(i, complete(int2bin(52 + i2)))
-                        d = d[:11]
-                        x0x1 = uncut64bits(d)
-
-                        for j2 in range(12):
-                            d2 = cut64bits(x0x1)
-                            d2.insert(j, complete(int2bin(52 + j2)))
-                            d2 = d2[:11]
-                            x0x1 = uncut64bits(d2)
-
-                            for k2 in range(12):
-                                d3 = cut64bits(x0x1)
-                                d3.insert(k, complete(int2bin(52 + k2)))
-                                d3 = d3[:11]
-                                x0x1 = uncut64bits(d3)
-
-                                for l2 in range(12):
-                                    d4 = cut64bits(x0x1)
-                                    d4.insert(l, complete(int2bin(52 + l2)))
-                                    d4 = d4[:11]
-                                    x0x1 = uncut64bits(d4)
-                                    if not x32bitsTo48bits(b2tob10(x0x1[:32]), b2tob10(x0x1[32:])) is None:
-                                        return x0x1
-
-    return None
-
-
-def insert5rejets(x0x1):
-    for i in range(7):
-        for j in range(i + 1, 8):
-            for k in range(j + 1, 9):
-                for l in range(k + 1, 10):
-                    for m in range(l + 1, 11):
-                        for i2 in range(12):
-                            d = cut64bits(x0x1)
-                            d.insert(i, complete(int2bin(52 + i2)))
-                            d = d[:11]
-                            x0x1 = uncut64bits(d)
-
-                            for j2 in range(12):
-                                d2 = cut64bits(x0x1)
-                                d2.insert(j, complete(int2bin(52 + j2)))
-                                d2 = d2[:11]
-                                x0x1 = uncut64bits(d2)
-
-                                for k2 in range(12):
-                                    d3 = cut64bits(x0x1)
-                                    d3.insert(k, complete(int2bin(52 + k2)))
-                                    d3 = d3[:11]
-                                    x0x1 = uncut64bits(d3)
-
-                                    for l2 in range(12):
-                                        d4 = cut64bits(x0x1)
-                                        d4.insert(l, complete(int2bin(52 + l2)))
-                                        d4 = d4[:11]
-                                        x0x1 = uncut64bits(d4)
-
-                                        for m2 in range(12):
-                                            d5 = cut64bits(x0x1)
-                                            d5.insert(m, complete(int2bin(52 + m2)))
-                                            d5 = d5[:11]
-                                            x0x1 = uncut64bits(d5)
-                                            if not x32bitsTo48bits(b2tob10(x0x1[:32]), b2tob10(x0x1[32:])) is None:
-                                                return x0x1
-
-    return None
-
-
-def insert6rejets(x0x1):
-    for i in range(6):
-        for j in range(i + 1, 7):
-            for k in range(j + 1, 8):
-                for l in range(k + 1, 9):
-                    for m in range(l + 1, 10):
-                        for n in range(m + 1, 11):
-                            for i2 in range(12):
-                                d = cut64bits(x0x1)
-                                d.insert(i, complete(int2bin(52 + i2)))
-                                d = d[:11]
-                                x0x1 = uncut64bits(d)
-
-                                for j2 in range(12):
-                                    d2 = cut64bits(x0x1)
-                                    d2.insert(j, complete(int2bin(52 + j2)))
-                                    d2 = d2[:11]
-                                    x0x1 = uncut64bits(d2)
-
-                                    for k2 in range(12):
-                                        d3 = cut64bits(x0x1)
-                                        d3.insert(k, complete(int2bin(52 + k2)))
-                                        d3 = d3[:11]
-                                        x0x1 = uncut64bits(d3)
-
-                                        for l2 in range(12):
-                                            d4 = cut64bits(x0x1)
-                                            d4.insert(l, complete(int2bin(52 + l2)))
-                                            d4 = d4[:11]
-                                            x0x1 = uncut64bits(d4)
-
-                                            for m2 in range(12):
-                                                d5 = cut64bits(x0x1)
-                                                d5.insert(m, complete(int2bin(52 + m2)))
-                                                d5 = d5[:11]
-                                                x0x1 = uncut64bits(d5)
-
-                                                for n2 in range(12):
-                                                    d6 = cut64bits(x0x1)
-                                                    d6.insert(n, complete(int2bin(52 + n2)))
-                                                    d6 = d6[:11]
-                                                    x0x1 = uncut64bits(d6)
-                                                    if not x32bitsTo48bits(b2tob10(x0x1[:32]), b2tob10(x0x1[32:])) is None:
-                                                        return x0x1
-
-    return None
-
-
 def trouveX0(x0x1 : str) -> int:
     x0 = x0x1[:32]
     x1 = x0x1[32:]
@@ -642,23 +516,6 @@ def trouveX0(x0x1 : str) -> int:
     print("3 rejets : " + str(end - start))
     if not (X0 is None):
         return X0
-    start = time.time()
-    X0 = insert4rejets(x0x1)
-    end = time.time()
-    print("4 rejets : " + str(end - start))
-    if not (X0 is None):
-        return X0
-    start = time.time()
-    X0 = insert5rejets(x0x1)
-    end = time.time()
-    print("5 rejets : " + str(end - start))
-    if not (X0 is None):
-        return X0
-    start = time.time()
-    X0 = insert6rejets(x0x1)
-    end = time.time()
-    print("6 rejets : " + str(end - start))
-    if not (X0 is None):
-        return X0
-    raise Exception("Pas de X0 trouvé")
+    # Temps d'execution trop long au dela de 3 rejets
+    return None
 
