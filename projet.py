@@ -1,7 +1,6 @@
 import json
 import time
-from typing import Tuple, List, Any
-
+from math import *
 
 class Game:
 
@@ -23,7 +22,6 @@ class Game:
         ret += "Joueur 4: " + str(self.getPlayerData(3)) + "\n"
         ret += "Table: " + str(self.getTableData()) + "\n"
         return ret
-
 
 def card2int(card: dict):
     '''
@@ -113,7 +111,7 @@ def makePerm(dep, ar, l=[k for k in range(51)]):
     return l
 
 
-def getx0(game: Game) -> tuple[list[Any], list[int]]:
+def getx0(game: Game):
     '''
 
     :param game: objet Game représentant la partie
@@ -155,7 +153,7 @@ def getx0(game: Game) -> tuple[list[Any], list[int]]:
     return x0, deck
 
 
-def getx1(game: Game, deck) -> list:
+def getx1(game: Game, deck):
     x1 = []
     deck = deck
     l = [game.getTableData()[i] for i in range(5)]
@@ -195,7 +193,7 @@ def getx1(game: Game, deck) -> list:
     return x1
 
 
-def getBitCardInfo(game: Game) -> tuple[str, list[int]]:
+def getBitCardInfo(game: Game):
     data = [game.getTableData()[i] for i in range(5)]
     deck = [k for k in range(52)]
     data_ret = ""
@@ -428,6 +426,11 @@ def uncut64bits(d):
 
 
 def insert1rejet(x0x1):
+    """
+    Insert 1 reject in a 64 bits string
+    :param x0x1: 64 bits string
+    :return: X0 if a compatible one has been found, None otherwise
+    """
     print(cut64bits(x0x1))
     for i in range(11):
         for i2 in range(12):
@@ -443,8 +446,13 @@ def insert1rejet(x0x1):
 
 
 def insert2rejets(x0x1):
+    """
+    Insert 2 rejects in a 64 bits string
+    :param x0x1: 64 bits string
+    :return: X0 if a compatible one has been found, None otherwise
+    """
     for i in range(10):
-        for j in range(i + 1, 11):
+        for j in range(i, 11):
             for i2 in range(12):
                 d = cut64bits(x0x1)
                 d.insert(i, complete(int2bin(52 + i2)))
@@ -463,9 +471,14 @@ def insert2rejets(x0x1):
 
 
 def insert3rejets(x0x1):
+    """
+    Insert 3 rejects in a 64 bits string
+    :param x0x1: 64 bits string
+    :return: X0 if a compatible one has been found, None otherwise
+    """
     for i in range(9):
-        for j in range(i + 1, 10):
-            for k in range(j + 1, 11):
+        for j in range(i, 10):
+            for k in range(j, 11):
                 for i2 in range(12):
                     d = cut64bits(x0x1)
                     d.insert(i, complete(int2bin(52 + i2)))
@@ -489,7 +502,12 @@ def insert3rejets(x0x1):
     return None
 
 
-def trouveX0(x0x1 : str) -> int:
+def trouveX0(x0x1 : str):
+    """
+    Find a compatible X0 for a given x0x1 string
+    :param x0x1: 64 bits string
+    :return: X0 if a compatible one has been found, None otherwise
+    """
     x0 = x0x1[:32]
     x1 = x0x1[32:]
     start = time.time()
@@ -518,4 +536,101 @@ def trouveX0(x0x1 : str) -> int:
         return X0
     # Temps d'execution trop long au dela de 3 rejets
     return None
+
+class Shuffle:
+    """
+    Class to shuffle a deck of cards, doing the same as the java code
+    """
+
+    def __init__(self, seed):
+        """
+        Constructor
+        :param seed: 48 bits seed
+        """
+        self.seed = seed
+        self.tronc_seed = seed >> 16
+        self.a = 25214903917
+        self.c = 11
+        self.m = 2**48
+        self.curr_index = 0
+        self.cards = [i for i in range(52)]
+
+    def __str__(self):
+        """
+        String representation of the cards
+        :return: String representation of the cards
+        """
+        res = ""
+        for i in range(52):
+            elmt = self.cards[i]
+            if elmt < 13:
+                res += str(elmt + 1) + " de PIQUE" + "\n"
+            elif elmt < 26:
+                res += str(elmt - 12) + " de TREFLE" + "\n"
+            elif elmt < 39:
+                res += str(elmt - 25) + " de COEUR" + "\n"
+            else:
+                res += str(elmt - 38) + " de CARREAU" + "\n"
+        return res
+
+    def next_seed(self):
+        """
+        Generate the next seed using parameters from the java.util.Random documentation
+        :return: None
+        """
+        self.seed = self.a*self.seed + self.c % self.m
+        self.tronc_seed = self.seed >> 16
+
+    def nextBit(self):
+        """
+        Generate the next bit of the seed
+        :return: the next bit of the seed
+        """
+        bit = self.tronc_seed & 1
+        self.tronc_seed = self.tronc_seed >> 1
+        self.curr_index += 1
+        if self.curr_index == 32:
+            self.next_seed()
+            self.curr_index = 0
+        return bit
+
+    def nextBits(self, n):
+        """
+        Generate the next n bits of the seed
+        :param n: number of bits to generate
+        :return: the next n bits of the seed
+        """
+        bits = []
+        for i in range(n):
+            bits.append(self.nextBit())
+        return bits
+
+    def nextInt(self, n):
+        """
+        Generate the next integer on n bits
+        :param n: number of bits to generate
+        :return: the next integer on n bits
+        """
+        bits = self.nextBits(n)
+        res = 0
+        for i in range(n):
+            res += bits[i]*2**i
+        return res
+
+    def shuffle(self, l):
+        """
+        Shuffle the list l using Knuth's algorithm
+        :param l: list to shuffle
+        :return: the shuffled list
+        """
+        for i in range(51):
+            print("i = " + str(i) + "   " + str(int(log2(51-i))+1))
+            nextPos = i + self.nextInt(int(log2(51-i))+1)
+            while nextPos >= 52:
+                nextPos = i + self.nextInt(int(log2(51-i))+1)
+            l[i], l[nextPos] = l[nextPos], l[i]
+        nextPos = i + self.nextInt(1)
+        l[i], l[nextPos] = l[nextPos], l[i]
+        return l
+
 
