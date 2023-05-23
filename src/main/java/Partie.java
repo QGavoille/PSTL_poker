@@ -81,7 +81,7 @@ public class Partie {
         JSONableGameData j = new JSONableGameData(this);
         Gson gson = new Gson();
         String json = gson.toJson(j);
-        FileWriter fr = new FileWriter("cards.projet",append);
+        FileWriter fr = new FileWriter("cards.projet");
         BufferedWriter writer = new BufferedWriter(fr);
         writer.write(json);
         writer.newLine();

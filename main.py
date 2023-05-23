@@ -6,6 +6,11 @@ print(x0x1)
 try:
     X0 = projet.trouveX0(x0x1)
     print("X0 = %s" % X0)
+    shuffle = projet.Shuffle(X0)
+    print("Shuffle = %s" % shuffle)
+    print("=====================================")
+    shuffle.shuffle(shuffle.cards)
+    print("Shuffle = %s" % shuffle)
 except Exception as e:
     print(e)
     exit(1)
