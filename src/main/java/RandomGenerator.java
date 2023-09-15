@@ -14,6 +14,10 @@ public class RandomGenerator {
        // System.out.print("l'entier: ");
        // System.out.println(first);
         toBitArray(first);
+        for (int i:randomBits
+             ) {
+            System.out.print(i);
+        }
       // System.out.println(this);
     }
 

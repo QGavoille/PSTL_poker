@@ -39,7 +39,7 @@ public class Partie {
     public void nvGame() throws IOException {
         deck = new CardGame(deck.getRandom());
         //deck.badShuffle();
-        deck.goodShuffle();
+        deck.badShuffle();
         deal();
     }
 
